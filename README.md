@@ -13,26 +13,23 @@ website/
 
 No build step; open `index.html` in a browser.
 
-## Deploy on GitHub Pages at https://imubench.io/
+## Deploy on GitHub Pages (free, like yang-ai-lab.github.io/Inertia-1/)
 
-GitHub Pages serves either the repository root or a `docs/` folder, so either
+The site lives in its own public repository, `SPICExLAB/imubench`, and GitHub Pages serves it at
+**https://spicexlab.github.io/imubench/** (Settings -> Pages -> Source: Deploy from a branch, `main`, `/ (root)`).
+No custom domain: the `CNAME` file was removed, and `canonical` / `og:url` point at the github.io address.
+All internal links are relative, so the site works at any path.
 
-* copy this folder to a repository of its own (`SPICExLAB/imubench.github.io`, Pages source = root of `main`; a project site, so it serves at `https://spicexlab.github.io/imubench.github.io/` until the custom domain is active), or
-* rename it to `docs/` in this repository and set Pages source = `main` / `docs`.
+The repository name is the last path segment. `IMU-Bench` is taken by the (private) code repository; once that
+repository is public, the site can move into its `docs/` folder (Pages source = `main` / `docs`) and the address becomes
+`https://spicexlab.github.io/IMU-Bench/`, which is what the Inertia-1 page does with its code repository.
 
-The `CNAME` file in this folder (contents: `imubench.io`) tells GitHub Pages which custom domain to serve. The domain
-does not resolve yet (checked 2026-10-08), so after the Pages site exists:
+Workflow: edit this folder in IMU-SSL, then copy it to the site clone and push:
 
-1. At the registrar, add the GitHub Pages apex records for `imubench.io`:
-   A `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   (and AAAA `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`),
-   plus a CNAME `www` -> `spicexlab.github.io` so `www.imubench.io` redirects to the apex.
-2. In the repository settings, Pages -> Custom domain: `imubench.io`, wait for the DNS check, then tick "Enforce HTTPS"
-   (the certificate is issued automatically once DNS has propagated).
-3. Pages rewrites the `CNAME` file if the domain is set from the UI; keep the one in this folder in sync.
-
-Both pages carry `<link rel="canonical">` and `og:url` pointing at `https://imubench.io/` and `https://imubench.io/paper/`.
-All internal links are relative, so the site also works at a `*.github.io` address or from the file system.
+```
+rsync -a --delete --exclude .git /gpfs/home/vbc1591/IMU-SSL/website/ ~/imubench-site/
+cd ~/imubench-site && git add -A && git commit -m "Update site" && git push
+```
 
 ## Before the site goes public
 
