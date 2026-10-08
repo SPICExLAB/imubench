@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>IMU-Bench Paper</title>
+  <meta name="description" content="IMU-Bench: Benchmarking Wrist IMU Representations Across Kinematic, Semantic and Clinical Tasks. Abstract, benchmark design, findings, tables and BibTeX.">
+  <meta property="og:title" content="IMU-Bench: Benchmarking Wrist IMU Representations Across Kinematic, Semantic and Clinical Tasks">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://imubench.io/paper/">
+  <link rel="canonical" href="https://imubench.io/paper/">
+  <link rel="icon" href="../static/images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/css/site.css">
+</head>
+<body id="top">
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+  <symbol id="i-board" viewBox="0 0 24 24"><path d="M4 20h16M7 20V10M12 20V4M17 20v-7"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8M5 10v10h14V10"/></symbol>
+</svg>
+
+<!-- ============ Navbar ============ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="../index.html"><span class="mark"></span><span>IMU-Bench</span><span class="v">paper</span></a>
+    <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false"><svg class="ic"><use href="#i-menu"/></svg></button>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html"><svg class="ic"><use href="#i-home"/></svg> Home</a></li>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#benchmark">Benchmark</a></li>
+        <li><a href="#findings">Findings</a></li>
+        <li><a href="#paper">Cite</a></li>
+        <li><a class="btn-mini" href="https://github.com/SPICExLAB/IMU-Bench" target="_blank" rel="noopener"><svg class="ic"><use href="#i-code"/></svg> Code</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ Title ============ -->
+<section class="paper-hero">
+  <div class="wrap">
+    <span class="kicker">Wrist IMU benchmark &middot; under review</span>
+    <h1>IMU-Bench: Benchmarking Wrist IMU Representations Across Kinematic, Semantic and Clinical Tasks</h1>
+    <p class="sub">A benchmark of ten tasks from eight datasets for studying IMU multi-task performance and cross-task transfer, with InrtlWrist, a reusable pretrained wrist-IMU encoder.</p>
+    <!-- TODO (after de-anonymization): replace the two lines below with the author list and affiliations, e.g.
+         <p class="authors">First Author<sup>1</sup>, Second Author<sup>2</sup>, Last Author<sup>1</sup></p>
+         <p class="affils"><sup>1</sup>University A &middot; <sup>2</sup>University B &middot; Correspondence: email</p> -->
+    <p class="authors">Authors withheld for double-blind review</p>
+    <p class="affils">Anonymous submission &middot; ICLR 2027</p>
+    <div class="cta-row center">
+      <span class="btn ghost" aria-disabled="true"><svg class="ic"><use href="#i-file"/></svg> arXiv <span class="soon">soon</span></span>
+      <span class="btn ghost" aria-disabled="true"><svg class="ic"><use href="#i-file"/></svg> PDF <span class="soon">soon</span></span>
+      <a class="btn ghost" href="https://github.com/SPICExLAB/IMU-Bench" target="_blank" rel="noopener"><svg class="ic"><use href="#i-code"/></svg> Code</a>
+      <a class="btn ghost" href="../index.html#leaderboard"><svg class="ic"><use href="#i-board"/></svg> Leaderboard</a>
+    </div>
+
+    <div class="stats" aria-label="Benchmark at a glance">
+      <div class="stat"><b>10</b><span>tasks</span></div>
+      <div class="stat"><b>8</b><span>datasets</span></div>
+      <div class="stat"><b>6</b><span>task families</span></div>
+      <div class="stat"><b>6</b><span>matched SSL methods</span></div>
+      <div class="stat"><b>3</b><span>evaluation protocols</span></div>
+      <div class="stat"><b>&asymp;280 h</b><span>of pretraining wrist motion</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Overview ============ -->
+<section class="section alt" id="overview">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Overview</span>
+      <h2>From single-task evaluation to a map of what a wrist representation carries</h2>
+    </div>
+    <div class="two-col">
+      <div class="prose">
+        <div class="abstract">
+          <p><strong>Abstract.</strong> Wrist-worn inertial measurement units (IMUs) provide a common sensing modality for tasks ranging from activity and gesture recognition to pose estimation, inertial odometry and clinical motor assessment. Existing wearable benchmarks evaluate performance across multiple tasks, but leave open how supervision for one task affects transfer to others and whether these tasks benefit from a shared representation. We present IMU-Bench, a benchmark of ten tasks from eight datasets for studying IMU multi-task performance and cross-task transfer. We compare six self-supervised methods pretrained on unlabeled recorded and simulated wrist motion, evaluating classification, pose and velocity estimation, and IMU&ndash;language retrieval. We find that our masked autoencoder, InrtlWrist, achieves the best or joint-best frozen-probe performance on nine of ten tasks, and fine-tuning improves on training from scratch on nine of ten tasks, including full-body pose, odometry and retrieval. Across transfer and joint-training experiments, supervision that benefits one target can reduce performance on others, with supervised sources transferring within kinematic estimation while, under frozen probing, none approaches the pretrained encoder on language retrieval, and joint-training gains that come at a cost to the paired task. These findings distinguish broad downstream usefulness from complementary task supervision. Code, splits, and a leaderboard will be released.</p>
+        </div>
+        <p><strong>Why this is hard.</strong> Different downstream tasks reveal distinct aspects of the same underlying motion, each offering only a partial view. Self-supervised wearable models are usually evaluated on activity recognition or health classification, under their own splits, decoders and pretraining corpora, while pose estimation and inertial odometry live in separate literatures with their own architectures and metrics. Whether these tasks draw on a common representation, and whether supervision for one is complementary to another, cannot be read off the existing literature.</p>
+        <p><strong>Our approach.</strong> IMU-Bench fixes the backbone, one light decoder per task, the data splits, the training budget and the model-selection rule, and audits every pretraining corpus against every evaluation set. Six self-supervised objectives are compared on the same corpus under frozen probing, fine-tuning and training from scratch, beside retrained task-specific systems. Supervised source-task transfer and joint training then measure whether task supervision is complementary.</p>
+      </div>
+      <div>
+        <figure class="paper-fig">
+          <img src="../static/images/teaser.png" alt="Overview of IMU-Bench in three panels: a sunburst of the ten evaluations, an encoder–decoder pretrained on label-less wrist and simulated data and then probed or fine-tuned, and a shared representation fanning out to odometry, activity, pose, gesture, text alignment and clinical tasks.">
+          <figcaption><b>Figure 1.</b> Overview of IMU-Bench. Ten tasks from eight datasets evaluate representations learned from single-wrist accelerometer and gyroscope signals. Pretraining uses unlabeled recorded and simulated motion. Frozen probing and fine-tuning measure downstream performance, while source-task transfer and joint training examine the effects of supervision across tasks.</figcaption>
+        </figure>
+        <ul class="news" style="margin-top:1.4rem">
+          <li><span class="d">Oct 2026</span><span>Project website is live.</span></li>
+          <li><span class="d">Sep 2026</span><span>Paper submitted for double-blind review.</span></li>
+          <li><span class="d">Soon</span><span>Code, task cards, splits, the InrtlWrist checkpoint and per-cell result files.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Benchmark ============ -->
+<section class="section" id="benchmark">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">The benchmark</span>
+      <h2>One controlled space over tasks, encoders, protocols and data</h2>
+      <p>Every number in the paper comes from one registry-driven harness: a task card fixing data, split, input window, decoder, recipe, selection rule and scorer, and an encoder card fixing checkpoint, architecture, input normalization and pretraining corpus.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><span class="n">01</span><h3>Tasks</h3><p>Ten tasks from eight datasets in six families: pose, odometry, microgesture, IMU&ndash;text retrieval, Parkinson's disease and activity recognition.</p></div>
+      <div class="pillar"><span class="n">02</span><h3>Encoders</h3><p>Six self-supervised objectives on one 12-layer, width-384 ViT (21&nbsp;M parameters) and one corpus of 197,094 unlabeled windows.</p></div>
+      <div class="pillar"><span class="n">03</span><h3>Protocols</h3><p>Frozen probing, fine-tuning and training from scratch, each with the same decoder, optimizer, budget, split and selection rule per task.</p></div>
+      <div class="pillar"><span class="n">04</span><h3>Audit</h3><p>Every pretraining corpus checked against every evaluation set; duplicated and mirrored participants merged; sensor units verified; evaluation sets excluded from pretraining.</p></div>
+    </div>
+
+    <div class="subhead">Tasks and datasets</div>
+    <div class="task-table-wrap">
+      <table class="tt">
+        <thead><tr><th>Task</th><th>Dataset</th><th class="r">Hours</th><th>Output</th><th>Metric</th><th>Split</th></tr></thead>
+        <tbody>
+          <tr class="k"><td><span class="fam-tag"></span>Arm pose</td><td>Nymeria</td><td class="r">300</td><td>5 right-arm joint rotations per 0.32&nbsp;s patch</td><td class="mono">position error, cm &darr;</td><td>recording session</td></tr>
+          <tr class="k"><td><span class="fam-tag"></span>Full-body pose</td><td>Nymeria</td><td class="r">300</td><td>23 SMPL joint rotations per 0.32&nbsp;s patch</td><td class="mono">root-relative MPJPE, mm &darr;</td><td>recording session</td></tr>
+          <tr class="k"><td><span class="fam-tag"></span>Inertial odometry</td><td>Nymeria</td><td class="r">300</td><td>pelvis velocity in the wrist frame, integrated to a trajectory</td><td class="mono">ATE, m &darr;</td><td>recording session</td></tr>
+          <tr class="s"><td><span class="fam-tag"></span>Microgesture</td><td>OpenWatch</td><td class="r">1.9</td><td>5 gestures + background, voted per clip</td><td class="mono">clip macro-F1 &uarr;</td><td>43 canonical subjects</td></tr>
+          <tr class="s"><td><span class="fam-tag"></span>IMU&ndash;text retrieval</td><td>HumanML3D (simulated wrist)</td><td class="r">28.6</td><td>alignment with CLIP ViT-B/32 text embeddings</td><td class="mono">mean Recall@1, galleries of 100 &uarr;</td><td>official test split</td></tr>
+          <tr class="c"><td><span class="fam-tag"></span>Parkinson's disease</td><td>PADS</td><td class="r">35.9</td><td>healthy / Parkinson's / differential diagnosis per participant</td><td class="mono">participant macro-F1 &uarr;</td><td>469 subjects, disjoint</td></tr>
+          <tr class="s"><td><span class="fam-tag"></span>Activity (6 classes)</td><td>HHAR</td><td class="r">4.8</td><td>2.56&nbsp;s window label</td><td class="mono">macro-F1 &uarr;</td><td>subject-disjoint</td></tr>
+          <tr class="s"><td><span class="fam-tag"></span>Activity (12 classes)</td><td>MHEALTH</td><td class="r">1.9</td><td>2.56&nbsp;s window label</td><td class="mono">macro-F1 &uarr;</td><td>subject-disjoint</td></tr>
+          <tr class="s"><td><span class="fam-tag"></span>Activity (5 classes)</td><td>PRISM</td><td class="r">16.3</td><td>2.56&nbsp;s window label</td><td class="mono">macro-F1 &uarr;</td><td>subject-disjoint</td></tr>
+          <tr class="s"><td><span class="fam-tag"></span>Activity (60 classes)</td><td>TransfHAR</td><td class="r">2.0</td><td>2.56&nbsp;s window label</td><td class="mono">macro-F1 &uarr;</td><td>80/20 in time</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lb-note">Hours are the sizes of the released datasets. Pretraining sources (released hours): UT-Watch 45.3, WISDM 44.7, RecoFit 43.0, PAMAP2 7.1, SAMoSA 6.7 and Shoaib 6.5 for activity recordings; OCDetect 2,600 and EatingSpeed 525.9 for free-living and meal sessions; Motion-X++ 40.4 and BONES-SEED 144.2 for wrist motion simulated from motion capture. The pretraining set uses 197,094 windows of 10.24&nbsp;s at 50% overlap, about 280 hours.</p>
+
+    <div class="subhead">Pretraining objectives</div>
+    <div class="methods">
+      <div class="method"><span class="t">Masked reconstruction</span><span class="s">Predict masked accelerometer and gyroscope patches. InrtlWrist alternates frame-wise attention across the six channels with global attention over all tokens; the decoder is discarded after pretraining.</span><div class="tags"><span class="ours">InrtlWrist</span><span>LIMU-BERT</span></div></div>
+      <div class="method"><span class="t">Reconstruction + contrastive</span><span class="s">Reconstruct from neighbors in a learned similarity space while pulling augmented views together.</span><div class="tags"><span>SimMTM</span></div></div>
+      <div class="method"><span class="t">Contrastive</span><span class="s">Contrastive, orthogonality and temporal losses (FOCAL) or a relative contrastive loss over motion neighbors (RelCon).</span><div class="tags"><span>FOCAL</span><span>RelCon</span></div></div>
+      <div class="method"><span class="t">Transformation prediction</span><span class="s">Classify which augmentations were applied to a window, the SSL-Wearables recipe, with cross-entropy.</span><div class="tags"><span>SSL-Wearables</span></div></div>
+      <div class="method"><span class="t">Controls</span><span class="s">A never-trained random frozen encoder, a raw-input control with zero transformer layers, and the same backbone trained from scratch per task.</span><div class="tags"><span>random frozen</span><span>raw input</span><span>scratch</span></div></div>
+      <div class="method"><span class="t">References</span><span class="s">A released pretrained model run unchanged, and task-specific systems retrained under each task's protocol with their own inputs and recipes.</span><div class="tags"><span>NormWear</span><span>MobilePoser</span><span>Air-IO</span><span>Mix-Token</span><span>UniMTS</span><span>DeepConvLSTM</span><span>BOSS + CatBoost</span></div></div>
+    </div>
+
+    <div class="subhead">Default setup</div>
+    <div class="setup">
+      <span class="chip">one wrist</span><span class="chip">6 channels: acc m/s&sup2;, gyro rad/s</span><span class="chip">forward&ndash;left&ndash;up frame</span><span class="chip">per-channel z-score</span><span class="chip">0.32&nbsp;s patches</span><span class="chip">1.28&ndash;10.24&nbsp;s crops</span><span class="chip">12-layer ViT, width 384, 21&nbsp;M</span><span class="chip">24 octahedral rotations in pretraining</span><span class="chip">linear heads for classification</span><span class="chip">width-192 attention decoders for kinematics</span><span class="chip">class-weighted cross-entropy</span><span class="chip">one A100 / H100 per run</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Findings ============ -->
+<section class="section alt" id="findings">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Findings</span>
+      <h2>What the benchmark reveals</h2>
+      <p>Among the six matched methods, one pretrained encoder is broadly useful. Which supervision is compatible with which target is a separate question, and the benchmark answers it pair by pair.</p>
+    </div>
+    <ul class="findlist">
+      <li><span class="n">01</span><div><b>One pretrained wrist encoder is broadly useful</b><p>InrtlWrist is best or joint-best under frozen probing on nine of ten tasks and eight after fine-tuning; fine-tuning improves on training from scratch on nine of ten tasks.</p></div></li>
+      <li><span class="n">02</span><div><b>Where frozen features fall short, fine-tuning closes the gap</b><p>Frozen features trail training from scratch on full-body pose and odometry and surpass it after fine-tuning; they already beat it on activity recognition and retrieval.</p></div></li>
+      <li><span class="n">03</span><div><b>Kinematic supervision transfers to kinematic targets</b><p>Each kinematic task's best frozen source is another kinematic task. Five of six such transfers survive, at about half their size, when evaluated on disjoint participants.</p></div></li>
+      <li><span class="n">04</span><div><b>Language retrieval stays with the pretrained encoder</b><p>Under frozen probing, no supervised source approaches InrtlWrist on IMU&ndash;text retrieval: at most 11.8 Recall@1 against 27.9.</p></div></li>
+      <li><span class="n">05</span><div><b>Joint training trades one task for another</b><p>Pairing full-body pose with odometry or gesture improves the partner task but raises body MPJPE and lowers frozen IMU&ndash;text recall.</p></div></li>
+    </ul>
+
+    <div class="sub-finding">
+      <div>
+        <h3><span class="n">4.1</span>Activity, gesture and clinical recognition</h3>
+        <div class="prose">
+          <p>Frozen InrtlWrist leads the six matched methods on all four activity datasets, with 57.8 mean macro-F1 against 56.2 for LIMU-BERT and 53.3 for training from scratch. Fine-tuning raises the mean to 63.9, with the largest gains on TransfHAR (72.7 to 86.1) and PRISM (27.9 to 36.8), while HHAR favors frozen probing. A random frozen encoder reaches 26.2 under the same readout.</p>
+          <p>On OpenWatch gestures, frozen InrtlWrist reaches 64.7 clip F1, ahead of every fine-tuned matched method; fine-tuning it drops the score to 54.2 while SimMTM leads at 61.9. On PADS, frozen InrtlWrist reaches 55.2 participant F1, below SSL-Wearables at 57.4 and only 3.5 points above the random frozen encoder, a weaker signal of pretraining benefit than on activity and gesture.</p>
+        </div>
+        <div class="kpis">
+          <div class="kpi s"><b>57.8 &rarr; 63.9</b><span>activity mean F1, frozen &rarr; fine-tuned</span></div>
+          <div class="kpi s"><b>64.7</b><span>frozen gesture F1, above every fine-tuned method</span></div>
+          <div class="kpi c"><b>55.2</b><span>Parkinson's participant F1, frozen (scratch 29.9)</span></div>
+        </div>
+      </div>
+      <figure class="paper-fig">
+        <img src="../static/images/main_radar.png" alt="Radar charts of frozen-probe and fine-tune performance across seven task axes for the six matched methods and training from scratch.">
+        <figcaption><b>Figure 2.</b> Downstream performance across task families under frozen probing (left) and fine-tuning (right), with training from scratch in both. Each axis is normalized to the best score across both panels; larger radii are better.</figcaption>
+      </figure>
+    </div>
+
+    <div class="sub-finding">
+      <div>
+        <h3><span class="n">4.2</span>Kinematic estimation</h3>
+        <div class="prose">
+          <p>Frozen InrtlWrist beats the random encoder on all three kinematic targets but trails training from scratch on full-body pose and odometry. Fine-tuning reduces full-body MPJPE from 97.9 to 88.1&nbsp;mm and odometry ATE from 0.200 to 0.154&nbsp;m, past the scratch baseline at 92.7&nbsp;mm and 0.162&nbsp;m, and gives the lowest error among the six matched methods on all five fine-tuned metrics. Arm pose changes little: frozen InrtlWrist and LIMU-BERT tie at 8.14&nbsp;cm, and fine-tuning reaches 8.01&nbsp;cm.</p>
+          <p>Retrained MobilePoser and Air-IO reach 91.9&nbsp;mm and 0.180&nbsp;m with their own inputs and recipes; MobilePoser also receives wrist orientation. These results use session-held-out Nymeria recordings with recurring participants, and odometry uses the ground-truth initial orientation over short windows.</p>
+        </div>
+        <div class="kpis">
+          <div class="kpi k"><b>88.1 mm</b><span>full-body MPJPE, fine-tuned (scratch 92.7)</span></div>
+          <div class="kpi k"><b>0.154 m</b><span>odometry ATE, fine-tuned (scratch 0.162)</span></div>
+          <div class="kpi k"><b>8.01 cm</b><span>arm position error, fine-tuned (scratch 8.21)</span></div>
+        </div>
+      </div>
+      <div class="lb-wrap">
+        <table class="lb">
+          <thead><tr><th>Encoder</th><th>Arm, cm &darr;<small>probe / fine-tune</small></th><th>Body MPJPE, mm &darr;<small>probe / fine-tune</small></th><th>Odometry ATE, m &darr;<small>probe / fine-tune</small></th></tr></thead>
+          <tbody>
+            <tr class="ours"><td>InrtlWrist (ours)</td><td><span class="b">8.14</span> / <span class="b">8.01</span></td><td><span class="b">97.9</span> / <span class="b">88.1</span></td><td><span class="b">0.200</span> / <span class="b">0.154</span></td></tr>
+            <tr><td>LIMU-BERT</td><td><span class="b">8.14</span> / 8.18</td><td>98.5 / 89.7</td><td>0.208 / 0.158</td></tr>
+            <tr><td>SimMTM</td><td>8.47 / 8.44</td><td>103.6 / 92.9</td><td>0.224 / 0.163</td></tr>
+            <tr><td>FOCAL</td><td>8.71 / 8.66</td><td>108.4 / 95.9</td><td>0.240 / 0.177</td></tr>
+            <tr><td>RelCon</td><td>8.50 / 8.55</td><td>104.3 / 92.1</td><td>0.215 / 0.167</td></tr>
+            <tr><td>SSL-Wearables</td><td>8.42 / 8.57</td><td>101.7 / 90.6</td><td>0.220 / 0.166</td></tr>
+            <tr class="ref sep"><td>Random encoder, frozen</td><td>8.46</td><td>105.0</td><td>0.233</td></tr>
+            <tr class="ref"><td>Same backbone, scratch</td><td>8.21</td><td>92.7</td><td>0.162</td></tr>
+            <tr class="ref"><td>Task-specific system</td><td>9.74 (IMUPoser)</td><td>91.9 (MobilePoser)</td><td>0.180 (Air-IO)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sub-finding">
+      <div>
+        <h3><span class="n">4.3</span>IMU&ndash;language retrieval</h3>
+        <div class="prose">
+          <p>InrtlWrist has the highest mean Recall@1 among the six matched methods under both protocols: 27.9 frozen against 24.9 for LIMU-BERT, 23.2 for training from scratch and 9.5 for the random frozen encoder, and 38.8 after fine-tuning. The advantage persists in the full 3,701-clip gallery, where fine-tuned InrtlWrist reaches 5.1 IMU-to-text and 4.4 text-to-IMU Recall@1 against 2.1 in both directions for scratch.</p>
+          <p>All encoders receive paired motion&ndash;text supervision during downstream training, so these numbers measure how well a pretrained representation supports learning alignment, not zero-shot language alignment.</p>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="kpi s"><b>27.9</b><span>frozen Recall@1 (scratch 23.2, random 9.5)</span></div>
+        <div class="kpi s"><b>38.8</b><span>fine-tuned Recall@1, galleries of 100</span></div>
+        <div class="kpi s"><b>5.1 / 4.4</b><span>full-gallery Recall@1, IMU&rarr;text / text&rarr;IMU</span></div>
+      </div>
+    </div>
+
+    <div class="sub-finding one">
+      <div>
+        <h3><span class="n">4.4</span>Cross-task transfer</h3>
+        <div class="prose">
+          <p>Each source encoder is trained from scratch on one of seven tasks and evaluated on the other six with a new decoder under the target's split and budget. Under frozen probing, supervised sources beat a random frozen encoder on 28 of 42 pairs, with 15 gains above 10%. Kinematic targets benefit most from kinematic sources: full-body supervision reduces odometry ATE from 0.233 to 0.186&nbsp;m. All six sources raise PRISM macro-F1 from 16.1 to 21.3&ndash;27.4 but fall below the random encoder on PADS, and none approaches InrtlWrist on gesture or IMU&ndash;text. Overall, 35 of 42 frozen transfers stay below target training from scratch.</p>
+          <p>With fine-tuning, 22 pairs improve over scratch and 20 decline. Every source improves IMU&ndash;text and PADS, with PRISM supervision reaching 58.5 PADS F1 against 51.9 for direct InrtlWrist fine-tuning. Four of six sources improve full-body pose, and odometry initialization reaches 87.9&nbsp;mm MPJPE. No source improves odometry, only odometry supervision improves arm pose, and every source reduces gesture F1.</p>
+        </div>
+      </div>
+      <div class="figpair">
+        <figure class="paper-fig">
+          <img src="../static/images/transfer_frozen.png" alt="Heatmap of frozen cross-task transfer, sources in columns and targets in rows, colored against a random frozen encoder.">
+          <figcaption><b>Figure 3a.</b> Frozen transfer, colored by relative improvement over a random frozen encoder.</figcaption>
+        </figure>
+        <figure class="paper-fig">
+          <img src="../static/images/transfer_finetune.png" alt="Heatmap of cross-task transfer with fine-tuning, sources in columns and targets in rows, colored against training from scratch.">
+          <figcaption><b>Figure 3b.</b> Transfer with fine-tuning, colored by relative improvement over target training from scratch. Green improves, orange-pink degrades, saturated at &plusmn;40%. MAE denotes InrtlWrist.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="sub-finding one">
+      <div>
+        <h3><span class="n">4.5</span>Decoder capacity, pretraining data and joint supervision</h3>
+        <div class="prose">
+          <p><strong>Decoder capacity.</strong> With a linear readout, pretraining is worth 9.7&nbsp;mm of full-body MPJPE over a random frozen encoder, and 7.1&nbsp;mm with the benchmark decoder. Increasing decoder width changes the gap little, while adding temporal layers reduces it below 1&nbsp;mm; a 12-layer odometry decoder lets the random encoder outperform every pretrained one. The benchmark therefore uses light readouts.</p>
+          <p><strong>Pretraining data and motion coverage.</strong> Holding architecture, probes and budget fixed, uniform draws from 0.1% to 100% of a 1,959,288-window pool perform alike at 50,000 updates, and the 0.01% subsets trail the 0.1% subsets at every coverage level. Restricting pretraining to subsets of 1,000 motion clusters hurts most when few clusters are available. These findings are conditional on the budget and sampling scheme.</p>
+          <p><strong>Joint task supervision.</strong> Fine-tuning InrtlWrist jointly on full-body pose and a partner task improves odometry ATE from 0.154 to 0.149&nbsp;m and gesture F1 from 54.2 to 65.0, but increases body MPJPE and lowers frozen IMU&ndash;text Recall@1.</p>
+        </div>
+      </div>
+      <div class="figpair">
+        <figure class="paper-fig">
+          <img src="../static/images/decoder_capacity.png" alt="Full-body MPJPE of a frozen pretrained and a frozen random encoder as decoder capacity grows; the gap shrinks once temporal layers are added.">
+          <figcaption><b>Figure 4.</b> Decoder capacity. Frozen-encoder MPJPE (mm, lower is better); &Delta; is pretrained minus random.</figcaption>
+        </figure>
+        <figure class="paper-fig">
+          <img src="../static/images/scaling_coverage.png" alt="Eight-probe mean against pretraining volume for different numbers of allowed motion clusters, after 50,000 updates.">
+          <figcaption><b>Figure 5.</b> Motion coverage. Eight-probe mean after 50,000 updates; per-probe changes from the full pool are normalized by its gain over random and clipped to &plusmn;100%.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Paper ============ -->
+<section class="section" id="paper">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Paper</span>
+      <h2>Read &amp; cite</h2>
+      <p>The paper is under double-blind review. The arXiv and PDF links will be added when the preprint is public.</p>
+    </div>
+    <div class="cite">
+      <div>
+        <div class="cta-row">
+          <span class="btn ghost" aria-disabled="true"><svg class="ic"><use href="#i-file"/></svg> arXiv <span class="soon">soon</span></span>
+          <span class="btn ghost" aria-disabled="true"><svg class="ic"><use href="#i-file"/></svg> PDF <span class="soon">soon</span></span>
+          <a class="btn ghost" href="https://github.com/SPICExLAB/IMU-Bench" target="_blank" rel="noopener"><svg class="ic"><use href="#i-code"/></svg> Code</a>
+        </div>
+        <p class="ack">Every number on this page is produced by the released harness from task cards and encoder cards; the per-cell result files, secondary metrics and the corpus audit are part of the release. <!-- TODO: acknowledgments and funding after de-anonymization. --></p>
+      </div>
+      <div class="bibtex">
+        <button class="copy-btn" type="button">Copy</button>
+<pre>@article{imubench2026,
+  title   = {IMU-Bench: Benchmarking Wrist IMU Representations
+             Across Kinematic, Semantic and Clinical Tasks},
+  author  = {Anonymous},
+  journal = {Under review},
+  year    = {2026}
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Footer ============ -->
+<footer class="footer">
+  <div class="wrap foot-inner">
+    <a class="brand" href="../index.html"><span class="mark"></span><span>IMU-Bench</span></a>
+    <nav class="foot-links">
+      <a href="../index.html">Home</a>
+      <a href="#overview">Overview</a>
+      <a href="#benchmark">Benchmark</a>
+      <a href="#findings">Findings</a>
+      <a href="#paper">Cite</a>
+      <a href="../index.html#leaderboard">Leaderboard</a>
+      <a href="https://github.com/SPICExLAB/IMU-Bench" target="_blank" rel="noopener">Code</a>
+    </nav>
+    <p class="foot-copy"><p class="foot-copy">&copy; 2026 IMU-Bench. Benchmarking wrist IMU representations across kinematic, semantic and clinical tasks.</p>copy; 2026 IMU-Bench <p class="foot-copy">&copy; 2026 IMU-Bench. Benchmarking wrist IMU representations across kinematic, semantic and clinical tasks.</p>middot; <a href="https://imubench.io/">imubench.io</a> <p class="foot-copy">&copy; 2026 IMU-Bench. Benchmarking wrist IMU representations across kinematic, semantic and clinical tasks.</p>middot; Benchmarking wrist IMU representations across kinematic, semantic and clinical tasks.</p>
+  </div>
+</footer>
+
+<script src="../static/js/site.js"></script>
+</body>
+</html>
