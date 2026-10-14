@@ -378,3 +378,4 @@ table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px s
 .finding.fig-wide .f-text .lede, .finding.fig-wide .f-detail ul { font-size: .93rem; }
 .finding.fig-wide .f-fig { padding: .5rem; }
 .finding.fig-wide .f-fig .two { gap: .5rem; }
+.finding .f-fig.fig-xs { max-width: 400px; }

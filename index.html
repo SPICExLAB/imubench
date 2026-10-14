@@ -527,7 +527,7 @@
         <h3>Decoder capacity</h3>
         <p class="lede">We compare frozen pretrained and random encoders as decoder capacity increases. Pretraining reduces full-body MPJPE by 9.7&nbsp;mm with a linear readout and 7.1&nbsp;mm with the benchmark decoder. Increasing decoder width changes this gap little, whereas adding temporal layers reduces it below 1&nbsp;mm. A 12-layer odometry decoder similarly lets the random encoder outperform every pretrained encoder. Stronger decoders narrow or reverse the measured advantage of pretraining, which is why the benchmark keeps its readouts light.</p>
       </div>
-      <figure class="f-fig fig-sm">
+      <figure class="f-fig fig-sm fig-xs">
         <img src="./static/images/decoder_capacity.png" alt="Full-body MPJPE of a frozen pretrained InrtlWrist and a frozen random encoder across five decoders: linear, one cross-channel layer at width 192 and 384, one cross-channel plus four temporal layers, and four cross-channel plus eight temporal layers. The gap shrinks from 9.7 mm to under 1 mm once temporal layers are added.">
         <figcaption>Figure 4. Decoder capacity. Frozen-encoder full-body MPJPE (mm, lower is better); &Delta; is pretrained minus random. Click to enlarge.</figcaption>
       </figure>
