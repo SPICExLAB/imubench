@@ -389,3 +389,9 @@ table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px s
 .lb-wrap.lb-fit { overflow-x: visible; margin-top: 1.2rem; }
 .lb-wrap.lb-fit table.lb { min-width: 0; width: 100%; }
 .lb-wrap.lb-fit table.lb th, .lb-wrap.lb-fit table.lb td { white-space: normal; }
+/* transfer finding, stronger: figure takes ~72% of the row, text one step smaller again */
+.finding.fig-wide { grid-template-columns: 1fr 2.6fr; }
+.finding.fig-wide .f-text h2 { font-size: clamp(1.15rem, 1.8vw, 1.4rem); line-height: 1.2; }
+.finding.fig-wide .f-text .lede, .finding.fig-wide .f-detail ul { font-size: .88rem; line-height: 1.5; }
+.finding.fig-wide .discover, .finding.fig-wide .back { font-size: .9rem; }
+.finding.fig-wide .f-fig figcaption { font-size: .78rem; }
