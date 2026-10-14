@@ -385,3 +385,7 @@ table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px s
 .finding .f-fig.fig-table table.lb { width: 100%; min-width: 0; font-size: .88rem; }
 .finding .f-fig.fig-table table.lb th, .finding .f-fig.fig-table table.lb td { white-space: normal; padding: .55rem .6rem; }
 .finding .f-fig.fig-table table.lb td:first-child { min-width: 0; }
+/* paper page: tables that fit their column instead of scrolling */
+.lb-wrap.lb-fit { overflow-x: visible; margin-top: 1.2rem; }
+.lb-wrap.lb-fit table.lb { min-width: 0; width: 100%; }
+.lb-wrap.lb-fit table.lb th, .lb-wrap.lb-fit table.lb td { white-space: normal; }
