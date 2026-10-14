@@ -364,3 +364,7 @@ table.lb td:first-child { white-space: normal; min-width: 14rem; }
 /* small panels: the card itself shrinks around its content and sits centred in the figure column */
 .finding .f-fig.fig-sm { max-width: 500px; width: 100%; justify-self: center; }
 .finding .f-fig.fig-sm img, .finding .f-fig.fig-sm figcaption, .finding .f-fig.fig-sm .lb-wrap, .finding .f-fig.fig-sm .lb-note { max-width: none; }
+/* leaderboard header: brighter accent tint instead of grey */
+table.lb th { background: var(--accent-bg); color: var(--accent-d); }
+table.lb th small { color: var(--accent); }
+table.lb th.grp { background: color-mix(in srgb, var(--accent-bg) 55%, var(--surface)); }
