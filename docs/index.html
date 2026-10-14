@@ -531,17 +531,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-imu-bench-relates-to-swe-benchs-practices" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How IMU-Bench relates to SWE-bench's practices
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#citation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1161,17 +1150,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-imu-bench-relates-to-swe-benchs-practices" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How IMU-Bench relates to SWE-bench's practices
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#citation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1287,53 +1265,6 @@ imu-bench<span class="w"> </span><span class="nb">eval</span><span class="w"> </
 <tr>
 <td>Website and leaderboard (also mirrored as a Space)</td>
 <td><a href="https://spicexlab.github.io/imubench/">spicexlab.github.io/imubench</a> · <a href="https://huggingface.co/spaces/YiquanLi/IMU-Bench">Space</a></td>
-</tr>
-</tbody>
-</table>
-<h2 id="how-imu-bench-relates-to-swe-benchs-practices">How IMU-Bench relates to SWE-bench's practices<a class="headerlink" href="#how-imu-bench-relates-to-swe-benchs-practices" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>SWE-bench practice</th>
-<th>IMU-Bench</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>One evaluation harness that everyone runs</td>
-<td><code>imu-bench eval</code>: the same trainer, decoders, splits, selection rule and scorers for every encoder</td>
-<td>available</td>
-</tr>
-<tr>
-<td>A fixed submission format</td>
-<td>an encoder card plus an encoder reachable through the plugin interface; one result JSON per cell</td>
-<td>available</td>
-</tr>
-<tr>
-<td>Leaderboard entries carry their artefacts and can be re-run</td>
-<td><code>imu-bench package</code> lays out results, card and the exact configs; submissions are pull requests</td>
-<td>available</td>
-</tr>
-<tr>
-<td>Verified instances</td>
-<td>participant-duplicate and corpus-overlap audits on every evaluation set (<code>imu-bench audit</code>)</td>
-<td>available</td>
-</tr>
-<tr>
-<td>Lite subset for fast iteration</td>
-<td><code>--tasks</code> / <code>--protocols</code> subsets today; a named Lite subset</td>
-<td>planned</td>
-</tr>
-<tr>
-<td>Containerised runs</td>
-<td>editable install with pinned requirements today; an official Docker image</td>
-<td>planned</td>
-</tr>
-<tr>
-<td>Maintainers re-run submissions</td>
-<td>leaderboard regenerated only from merged result files; spot re-runs of public-weight submissions</td>
-<td>planned</td>
 </tr>
 </tbody>
 </table>
