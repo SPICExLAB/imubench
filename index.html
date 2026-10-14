@@ -229,8 +229,62 @@
   </div>
 </section>
 
+<!-- ============ Ablations ============ -->
+<section class="section alt" id="ablations">
+  <div class="wrap wrap-wide">
+    <div class="section-head reveal">
+      <span class="kicker">Ablations</span>
+      <h2>Architecture and training ablations</h2>
+      <p>Three controls behind the protocol: how much the readout contributes to a frozen probe, whether more pretraining data helps, and what joint supervision trades away.</p>
+    </div>
+
+    <div class="finding reveal" id="abl-decoder">
+      <div class="f-text">
+        <h3>Decoder capacity</h3>
+        <p class="lede">We compare frozen pretrained and random encoders as decoder capacity increases. Pretraining reduces full-body MPJPE by 9.7&nbsp;mm with a linear readout and 7.1&nbsp;mm with the benchmark decoder. Increasing decoder width changes this gap little, whereas adding temporal layers reduces it below 1&nbsp;mm. A 12-layer odometry decoder similarly lets the random encoder outperform every pretrained encoder. Stronger decoders narrow or reverse the measured advantage of pretraining, which is why the benchmark keeps its readouts light.</p>
+      </div>
+      <figure class="f-fig">
+        <img src="./static/images/decoder_capacity.png" alt="Full-body MPJPE of a frozen pretrained InrtlWrist and a frozen random encoder across five decoders: linear, one cross-channel layer at width 192 and 384, one cross-channel plus four temporal layers, and four cross-channel plus eight temporal layers. The gap shrinks from 9.7 mm to under 1 mm once temporal layers are added.">
+        <figcaption>Figure 4. Decoder capacity. Frozen-encoder full-body MPJPE (mm, lower is better); &Delta; is pretrained minus random. Click to enlarge.</figcaption>
+      </figure>
+    </div>
+
+    <div class="finding flip reveal" id="abl-coverage">
+      <div class="f-text">
+        <h3>Pretraining data and motion coverage</h3>
+        <p class="lede">Holding the architecture, probes and training budget fixed, we vary the amount and coverage of pretraining data: uniform draws from a five-source pool of 1,959,288 windows, or draws restricted to subsets of 1,000 motion clusters obtained by k-means on a separately trained MAE's features. At 50,000 updates, the 0.01% subsets trail the 0.1% subsets at every coverage level, while uniform draws from 0.1% to 100% of the pool perform alike. Increasing motion coverage generally improves performance, most when few clusters are available. These findings are conditional on the training budget and the sampling scheme, since restricting clusters also changes source composition.</p>
+      </div>
+      <figure class="f-fig">
+        <img src="./static/images/scaling_coverage.png" alt="Eight-probe mean against pretraining volume for different numbers of allowed motion clusters after 50,000 updates, normalized by the full pool's gain over a random encoder.">
+        <figcaption>Figure 5. Motion coverage. Eight-probe mean after 50,000 updates. Per-probe changes from the full pool are normalized by its gain over random and clipped to &plusmn;100%. Click to enlarge.</figcaption>
+      </figure>
+    </div>
+
+    <div class="finding reveal" id="abl-joint">
+      <div class="f-text">
+        <h3>Joint task supervision</h3>
+        <p class="lede">We compare single-task fine-tuning with joint supervision of full-body pose and either odometry or microgesture, starting from the same pretrained encoder with separate decoders. Joint training improves odometry ATE from 0.154 to 0.149&nbsp;m and gesture F1 from 54.2 to 65.0, above training from scratch. It also raises full-body MPJPE from 88.1&nbsp;mm alone to 91.5&nbsp;mm with odometry and 94.4&nbsp;mm with microgesture, and lowers the joint encoder's frozen IMU&ndash;text Recall@1 from 27.9 to 21.0 and 17.2. Gains on the partner task come with losses on the jointly trained pose task and on language retrieval. Pose with odometry alternates 1:1 for 40,000 steps; pose with microgesture 10:1 for 22,000 steps; each target selects its own checkpoint.</p>
+      </div>
+      <div class="f-fig">
+        <div class="lb-wrap">
+          <table class="lb">
+            <thead><tr><th>Target</th><th>Scratch</th><th>InrtlWrist alone</th><th>InrtlWrist + full-body pose</th></tr></thead>
+            <tbody>
+              <tr><td>Odometry ATE (m) &darr;</td><td>0.162</td><td>0.154</td><td class="b">0.149</td></tr>
+              <tr><td>Microgesture clip F1 &uarr;</td><td>60.8</td><td>54.2</td><td class="b">65.0</td></tr>
+              <tr class="sep ref"><td>Full-body MPJPE (mm) &darr;, trained jointly</td><td>92.7</td><td>88.1</td><td>91.5 with odometry &middot; 94.4 with gesture</td></tr>
+              <tr class="ref"><td>Frozen IMU&ndash;text R@1 &uarr; of the resulting encoder</td><td>&ndash;</td><td>27.9</td><td>21.0 &middot; 17.2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="lb-note">Joint fine-tuning with full-body pose. Both InrtlWrist conditions start from the same pretrained encoder; scores use per-task checkpoints. Bold: best per row among the two partner-task rows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ Also worth knowing ============ -->
-<section class="section alt" id="notes">
+<section class="section" id="notes">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Also worth knowing</span>
@@ -238,17 +292,9 @@
       <p>A few results from the ablations that change how wrist-IMU benchmarks should be read.</p>
     </div>
     <ul class="blist reveal">
-      <li><details class="bl-item a-acc">
-        <summary><span class="bl-dot"></span>Decoder capacity can hide the encoder<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
-        <div class="bl-body"><p>With a linear readout, pretraining is worth 9.7&nbsp;mm of full-body MPJPE over a random encoder; with the benchmark decoder, 7.1&nbsp;mm. Adding temporal layers to the decoder shrinks the gap below 1&nbsp;mm, and a 12-layer odometry decoder lets the random encoder beat every pretrained one. The benchmark therefore keeps its readouts light.</p></div>
-      </details></li>
       <li><details class="bl-item a-sem">
         <summary><span class="bl-dot"></span>Frozen or fine-tuned depends on the task<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
         <div class="bl-body"><p>HHAR and gesture favor frozen probing. TransfHAR (72.7 to 86.1 F1) and PRISM (27.9 to 36.8) gain most from fine-tuning, and both kinematic tasks need it to pass training from scratch.</p></div>
-      </details></li>
-      <li><details class="bl-item a-kin">
-        <summary><span class="bl-dot"></span>More windows, same scores<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
-        <div class="bl-body"><p>At 50,000 updates, uniform draws from 0.1% to 100% of a 1.96&nbsp;M-window pool perform alike. Restricting pretraining to a few of 1,000 motion clusters hurts, most when little data is available. The result is conditional on the budget and the sampling scheme.</p></div>
       </details></li>
       <li><details class="bl-item a-kin">
         <summary><span class="bl-dot"></span>The gyroscope matters for kinematics and retrieval<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
@@ -263,7 +309,7 @@
 </section>
 
 <!-- ============ Tasks ============ -->
-<section class="section" id="tasks">
+<section class="section alt" id="tasks">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Tasks</span>
@@ -312,7 +358,7 @@
 </section>
 
 <!-- ============ Leaderboard ============ -->
-<section class="section alt" id="leaderboard">
+<section class="section" id="leaderboard">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Leaderboard</span>

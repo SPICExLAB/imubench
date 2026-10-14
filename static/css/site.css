@@ -351,3 +351,10 @@ table.lb th.grp { text-align: center; border-bottom: 1px solid var(--line); }
 table.lb tr.section td { font-size: .82rem; color: var(--muted); background: var(--surface-2); padding-top: .4rem; padding-bottom: .4rem; }
 table.lb td:first-child { white-space: normal; min-width: 14rem; }
 .lb-note.tt-cap { margin-top: .6rem; }
+
+/* ablation rows: h3 headings in the finding layout */
+.finding .f-text h3 { font-size: clamp(1.35rem, 2.4vw, 1.8rem); font-weight: 700; margin-bottom: .9rem; }
+.finding .f-fig .lb-wrap { box-shadow: none; }
+.finding .f-fig .lb-note { margin-top: .6rem; font-size: .82rem; }
+.finding .f-fig table.lb { min-width: 0; }
+.finding .f-fig table.lb td:first-child { min-width: 0; }
