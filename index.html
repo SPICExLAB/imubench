@@ -41,9 +41,9 @@
     <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false"><svg class="ic"><use href="#i-menu"/></svg></button>
     <nav>
       <ul class="nav-links">
+        <li><a href="#how">How it works</a></li>
         <li><a href="#idea">The question</a></li>
         <li><a href="#findings">Findings</a></li>
-        <li><a href="#how">How it works</a></li>
         <li><a href="#tasks">Tasks</a></li>
         <li><a href="#leaderboard">Leaderboard</a></li>
         <li><a class="btn-mini" href="./paper/index.html">Read the paper</a></li>
@@ -110,8 +110,39 @@
   </div>
 </section>
 
+<!-- ============ How it works ============ -->
+<section class="section alt" id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">How it works</span>
+      <h2>One harness, from task card to transfer map</h2>
+      <p>Every number comes from one registry-driven harness: a task card per task and an encoder card per model.</p>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl-step a-kin">
+        <img src="./static/images/panel_benchmark.png" alt="Sunburst of the ten evaluations grouped into kinematics, recognition and retrieval.">
+        <div class="tl-node">01 &middot; Benchmark</div>
+        <div class="tl-title">Build the evaluation suite</div>
+        <p class="tl-desc">Ten tasks, eight datasets, six families. One task card per task fixes the inputs, decoder, split rule, metric and training budget, and every pretraining corpus is audited against every evaluation set.</p>
+      </div>
+      <div class="tl-step a-sem">
+        <img src="./static/images/panel_pretrain.png" alt="Label-less wrist and simulated signals entering an encoder–decoder; the encoder is probed frozen or fine-tuned.">
+        <div class="tl-node">02 &middot; Pretrain, probe, fine-tune</div>
+        <div class="tl-title">Compare objectives on equal footing</div>
+        <p class="tl-desc">Six self-supervised objectives on one 12-layer, 21&nbsp;M-parameter ViT and one corpus of 197,094 unlabeled wrist windows. Each encoder is scored under frozen probing, fine-tuning and training from scratch with the same decoder.</p>
+      </div>
+      <div class="tl-step a-cli">
+        <img src="./static/images/panel_transfer.png" alt="A shared representation manifold fanning out to odometry, activity, pose, gesture, text alignment and clinical tasks.">
+        <div class="tl-node">03 &middot; Transfer</div>
+        <div class="tl-title">Measure what transfers</div>
+        <p class="tl-desc">Seven supervised source tasks evaluated on six targets each, plus joint-training pairs, separate broadly useful pretraining from complementary task supervision.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ The question ============ -->
-<section class="section alt" id="idea">
+<section class="section" id="idea">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">The question</span>
@@ -136,7 +167,7 @@
 </section>
 
 <!-- ============ Finding 1 ============ -->
-<section class="section" id="findings">
+<section class="section alt" id="findings">
   <div class="wrap wrap-wide">
     <div class="section-head reveal">
       <span class="kicker">What we found</span>
@@ -168,12 +199,12 @@
 </section>
 
 <!-- ============ Finding 2 ============ -->
-<section class="section alt" id="transfer">
+<section class="section" id="transfer">
   <div class="wrap wrap-wide">
     <div class="finding flip reveal" id="finding-transfer">
       <div class="f-text">
-        <h2>Supervision for one task can cost another.</h2>
-        <p class="lede">Seven supervised source encoders, each trained from scratch on one task, are evaluated on the other six. Kinematic supervision transfers to kinematic targets. Nothing but the pretrained encoder carries language retrieval. Joint training gains on one task and loses on its partner.</p>
+        <h2>Supervision for one task can benefit another, but not every pair is complementary.</h2>
+        <p class="lede">Seven supervised source encoders, each trained from scratch on one task, are evaluated on the other six. Kinematic supervision transfers to kinematic targets, and with fine-tuning every source improves IMU&ndash;text retrieval and Parkinson's. Under frozen probing, language retrieval stays with the pretrained encoder, and joint training gains on one task at a cost to its partner.</p>
         <button class="discover" type="button" aria-expanded="false"><span>Discover more</span><svg class="ic"><use href="#i-arrow-r"/></svg></button>
         <div class="f-detail">
           <ul>
@@ -197,7 +228,7 @@
 </section>
 
 <!-- ============ Also worth knowing ============ -->
-<section class="section" id="notes">
+<section class="section alt" id="notes">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Also worth knowing</span>
@@ -226,37 +257,6 @@
         <div class="bl-body"><p>Every pretraining corpus is checked against every evaluation set, and evaluation datasets are excluded from pretraining. OpenWatch's duplicated and mirrored participant records are merged into canonical identities before the subject split, and sensor units are verified for every source.</p></div>
       </details></li>
     </ul>
-  </div>
-</section>
-
-<!-- ============ How it works ============ -->
-<section class="section alt" id="how">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="kicker">How it works</span>
-      <h2>One harness, from task card to transfer map</h2>
-      <p>Every number comes from one registry-driven harness: a task card per task and an encoder card per model.</p>
-    </div>
-    <div class="timeline reveal">
-      <div class="tl-step a-kin">
-        <img src="./static/images/panel_benchmark.png" alt="Sunburst of the ten evaluations grouped into kinematics, recognition and retrieval.">
-        <div class="tl-node">01 &middot; Benchmark</div>
-        <div class="tl-title">Build the evaluation suite</div>
-        <p class="tl-desc">Ten tasks, eight datasets, six families. One task card per task fixes the inputs, decoder, split rule, metric and training budget, and every pretraining corpus is audited against every evaluation set.</p>
-      </div>
-      <div class="tl-step a-sem">
-        <img src="./static/images/panel_pretrain.png" alt="Label-less wrist and simulated signals entering an encoder–decoder; the encoder is probed frozen or fine-tuned.">
-        <div class="tl-node">02 &middot; Pretrain, probe, fine-tune</div>
-        <div class="tl-title">Compare objectives on equal footing</div>
-        <p class="tl-desc">Six self-supervised objectives on one 12-layer, 21&nbsp;M-parameter ViT and one corpus of 197,094 unlabeled wrist windows. Each encoder is scored under frozen probing, fine-tuning and training from scratch with the same decoder.</p>
-      </div>
-      <div class="tl-step a-cli">
-        <img src="./static/images/panel_transfer.png" alt="A shared representation manifold fanning out to odometry, activity, pose, gesture, text alignment and clinical tasks.">
-        <div class="tl-node">03 &middot; Transfer</div>
-        <div class="tl-title">Measure what transfers</div>
-        <p class="tl-desc">Seven supervised source tasks evaluated on six targets each, plus joint-training pairs, separate broadly useful pretraining from complementary task supervision.</p>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -387,9 +387,9 @@
   <div class="wrap foot-inner">
     <a class="brand" href="#top"><span class="mark"></span><span>IMU-Bench</span></a>
     <nav class="foot-links">
+      <a href="#how">How it works</a>
       <a href="#idea">The question</a>
       <a href="#findings">Findings</a>
-      <a href="#how">How it works</a>
       <a href="#tasks">Tasks</a>
       <a href="#leaderboard">Leaderboard</a>
       <a href="./paper/index.html">Paper</a>
