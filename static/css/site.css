@@ -405,3 +405,4 @@ table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px s
 /* qualitative figures: full-width stacked cards */
 .qual-grid { display: grid; gap: 1.4rem; }
 .qual-grid figure.paper-fig img { cursor: zoom-in; }
+table.lb td.contam { color: var(--muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 60%, transparent); }
