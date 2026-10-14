@@ -549,7 +549,7 @@
         <h3>Joint task supervision</h3>
         <p class="lede">We compare single-task fine-tuning with joint supervision of full-body pose and either odometry or microgesture, starting from the same pretrained encoder with separate decoders. Joint training improves odometry ATE from 0.154 to 0.149&nbsp;m and gesture F1 from 54.2 to 65.0, above training from scratch. It also raises full-body MPJPE from 88.1&nbsp;mm alone to 91.5&nbsp;mm with odometry and 94.4&nbsp;mm with microgesture, and lowers the joint encoder's frozen IMU&ndash;text Recall@1 from 27.9 to 21.0 and 17.2. Gains on the partner task come with losses on the jointly trained pose task and on language retrieval. Pose with odometry alternates 1:1 for 40,000 steps; pose with microgesture 10:1 for 22,000 steps; each target selects its own checkpoint.</p>
       </div>
-      <div class="f-fig fig-sm">
+      <div class="f-fig fig-sm fig-table">
         <div class="lb-wrap">
           <table class="lb">
             <thead><tr><th>Target</th><th>Scratch</th><th>InrtlWrist alone</th><th>InrtlWrist + full-body pose</th></tr></thead>

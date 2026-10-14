@@ -379,3 +379,9 @@ table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px s
 .finding.fig-wide .f-fig { padding: .5rem; }
 .finding.fig-wide .f-fig .two { gap: .5rem; }
 .finding .f-fig.fig-xs { max-width: 400px; }
+/* joint-training table: no horizontal scrolling, cells wrap, card a little wider */
+.finding .f-fig.fig-table { max-width: 640px; }
+.finding .f-fig.fig-table .lb-wrap { overflow-x: visible; }
+.finding .f-fig.fig-table table.lb { width: 100%; min-width: 0; font-size: .88rem; }
+.finding .f-fig.fig-table table.lb th, .finding .f-fig.fig-table table.lb td { white-space: normal; padding: .55rem .6rem; }
+.finding .f-fig.fig-table table.lb td:first-child { min-width: 0; }
