@@ -398,3 +398,7 @@ table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px s
 /* fix: images inside small panels must fill the card, never their natural width */
 .finding .f-fig.fig-sm img { max-width: 100%; width: 100%; height: auto; }
 .finding .f-fig.fig-sm { overflow: hidden; }
+/* flipped rows: the figure occupies the first column, so the wide track must come first */
+.finding.flip { grid-template-columns: 3fr 2fr; }
+.finding.flip.fig-wide { grid-template-columns: 2.6fr 1fr; }
+@media (max-width: 1000px) { .finding.flip, .finding.flip.fig-wide { grid-template-columns: 1fr; } }
