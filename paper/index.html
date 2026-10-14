@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/css/site.css?v=12">
+  <link rel="stylesheet" href="../static/css/site.css?v=13">
 </head>
 <body id="top">
 
@@ -84,7 +84,7 @@
     <div class="two-col">
       <div class="prose">
         <div class="abstract">
-          <p><strong>Abstract.</strong> Wrist-worn inertial measurement units (IMUs) provide a common sensing modality for tasks ranging from activity and gesture recognition to pose estimation, inertial odometry and clinical motor assessment. Existing wearable benchmarks evaluate performance across multiple tasks, but leave open how supervision for one task affects transfer to others and whether these tasks benefit from a shared representation. We present IMU-Bench, a benchmark of ten tasks from eight datasets for studying IMU multi-task performance and cross-task transfer. We compare six self-supervised methods pretrained on unlabeled recorded and simulated wrist motion, evaluating classification, pose and velocity estimation, and IMU&ndash;language retrieval. We find that our masked autoencoder, InrtlWrist, achieves the best or joint-best frozen-probe performance on nine of ten tasks, and fine-tuning improves on training from scratch on nine of ten tasks, including full-body pose, odometry and retrieval. Across transfer and joint-training experiments, supervision that benefits one target can reduce performance on others, with supervised sources transferring within kinematic estimation while, under frozen probing, none approaches the pretrained encoder on language retrieval, and joint-training gains that come at a cost to the paired task. These findings distinguish broad downstream usefulness from complementary task supervision. Code, splits, and a leaderboard will be released.</p>
+          <p><strong>Abstract.</strong> Wrist-worn inertial measurement units (IMUs) provide a common sensing modality for tasks ranging from activity and gesture recognition to pose estimation, inertial odometry and clinical motor assessment. Existing wearable benchmarks evaluate performance across multiple tasks, but leave open how supervision for one task affects transfer to others and whether these tasks benefit from a shared representation. We present IMU-Bench, a benchmark of ten tasks from eight datasets for studying IMU multi-task performance and cross-task transfer. We compare six self-supervised methods pretrained on unlabeled recorded and simulated wrist motion, evaluating classification, pose and velocity estimation, and IMU&ndash;language retrieval. We find that our masked autoencoder, InrtlWrist, achieves the best or joint-best frozen-probe performance on nine of ten tasks, and fine-tuning improves on training from scratch on nine of ten tasks, including full-body pose, odometry and retrieval. Across transfer and joint-training experiments, supervision that benefits one target can reduce performance on others, with supervised sources transferring within kinematic estimation while, under frozen probing, none approaches the pretrained encoder on language retrieval, and joint-training gains that come at a cost to the paired task. These findings distinguish broad downstream usefulness from complementary task supervision. Code, task cards, the InrtlWrist weights and a leaderboard are publicly available.</p>
         </div>
         <p><strong>Why this is hard.</strong> Different downstream tasks reveal distinct aspects of the same underlying motion, each offering only a partial view. Self-supervised wearable models are usually evaluated on activity recognition or health classification, under their own splits, decoders and pretraining corpora, while pose estimation and inertial odometry live in separate literatures with their own architectures and metrics. Whether these tasks draw on a common representation, and whether supervision for one is complementary to another, cannot be read off the existing literature.</p>
         <p><strong>Our approach.</strong> IMU-Bench fixes the backbone, one light decoder per task, the data splits, the training budget and the model-selection rule, and audits every pretraining corpus against every evaluation set. Six self-supervised objectives are compared on the same corpus under frozen probing, fine-tuning and training from scratch, beside retrained task-specific systems. Supervised source-task transfer and joint training then measure whether task supervision is complementary.</p>
@@ -330,6 +330,6 @@
   </div>
 </footer>
 
-<script src="../static/js/site.js?v=12"></script>
+<script src="../static/js/site.js?v=13"></script>
 </body>
 </html>

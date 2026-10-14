@@ -47,9 +47,12 @@ def parse(tex):
             continue
         cells = [c.strip() for c in l[:-2].split("&")]
         if header is None:
-            mc = re.findall(r"\\multicolumn\{(\d+)\}\{c\}\{([^}]*)\}", l)
-            if mc and len(mc) + 1 >= len(cells) - 1 and all("multicolumn" in c or c == "" for c in cells):
-                groups = [(int(n), untex(t)) for n, t in mc]  # group header row
+            if any("\\multicolumn" in c for c in cells):
+                # group header row: every cell is either \multicolumn{n}{c}{text} or a plain (span-1) label
+                groups = []
+                for c in cells:
+                    m = re.match(r"\\multicolumn\{(\d+)\}\{[^}]*\}\{(.*)\}$", c)
+                    groups.append((int(m.group(1)), untex(m.group(2))) if m else (1, untex(c)))
                 continue
             header = [untex(c) for c in cells]
             continue
@@ -66,7 +69,7 @@ def render(stem, label, pid, paper):
     n = len(header)
     out = ['<div class="lb-wrap" id="%s" role="tabpanel" aria-labelledby="%s-tab" hidden>' % (pid, pid), '<table class="lb">', "<thead>"]
     if groups:
-        out.append("<tr><th></th>" + "".join('<th class="grp" colspan="%d">%s</th>' % (k, t) if t else '<th colspan="%d"></th>' % k for k, t in groups) + "</tr>")
+        out.append("<tr>" + "".join('<th class="grp" colspan="%d">%s</th>' % (k, t) if t else '<th colspan="%d"></th>' % k for k, t in groups) + "</tr>")
     out.append("<tr>" + "".join("<th>%s</th>" % h for h in header) + "</tr>")
     out.append("</thead><tbody>")
     in_ref = False
@@ -90,14 +93,59 @@ def render(stem, label, pid, paper):
     return "\n".join(out)
 
 
+POOL_HAR = [("har_wisdm", "WISDM"), ("har_pamap2", "PAMAP2"), ("har_recofit", "RecoFit"), ("har_utd_mhad", "UTD-MHAD"),
+            ("har_samosa", "SAMoSA"), ("har_ut_watch", "UT-Watch")]
+POOL_ROWS = [
+    ("Frozen probe", [("mae_5src", "probe", "InrtlWrist (Ours)", "ours"), ("harnet5", "probe", "HarNet-5s (released, UK Biobank)", "ref")]),
+    ("Fine-tune", [("mae_5src", "finetune", "InrtlWrist (Ours)", "ours"), ("harnet5", "finetune", "HarNet-5s (released, UK Biobank)", "ref")]),
+    ("From scratch", [("scratch", "scratch", "Same backbone, scratch", "ref")]),
+    ("Task-specific systems (not ranked)", [("deepconvlstm", "external", "DeepConvLSTM (Ord\u00f3\u00f1ez &amp; Roggen)", "ref")]),
+]
+
+
+def render_pool_har(results_root, pid="tt-pool"):
+    """Window macro-F1 on the six activity datasets that sit in the pretraining pool, read from bench/results."""
+    import glob, json
+    def cell(task, enc, proto):
+        for f in sorted(glob.glob(os.path.join(results_root, task, "%s__%s__s*.json" % (enc, proto)))):
+            try:
+                d = json.load(open(f)); v = (d.get("metrics") or {}).get("macro_f1")
+                if v is not None: return float(v) * 100.0
+            except Exception: pass
+        return None
+    out = ['<div class="lb-wrap" id="%s" role="tabpanel" aria-labelledby="%s-tab" hidden>' % (pid, pid), '<table class="lb">', "<thead>",
+           "<tr><th>Encoder</th>" + "".join("<th>%s<small>macro-F1 &uarr;</small></th>" % lab for _, lab in POOL_HAR) + "<th>Mean<small>over available sets</small></th></tr>",
+           "</thead><tbody>"]
+    n = len(POOL_HAR) + 2
+    for sec, rows in POOL_ROWS:
+        out.append('<tr class="section sep"><td colspan="%d"><em>%s</em></td></tr>' % (n, sec))
+        for enc, proto, label, cls in rows:
+            vals = [cell(t, enc, proto) for t, _ in POOL_HAR]
+            have = [v for v in vals if v is not None]
+            tds = "".join("<td>%s</td>" % ("%.1f" % v if v is not None else "&ndash;") for v in vals)
+            mean = "%.1f<small>%d sets</small>" % (sum(have) / len(have), len(have)) if have else "&ndash;"
+            out.append('<tr class="%s"><td>%s</td>%s<td>%s</td></tr>' % (cls, label, tds, mean))
+    out.append("</tbody></table></div>")
+    cap = ("Activity recognition on the six datasets of the pretraining pool: window macro-F1 (%) on each set's subject-disjoint "
+           "validation split, one seed, the benchmark's HAR recipe (2.56 s windows, linear probe or full fine-tune). These sets are "
+           "not evaluation tasks in the paper because they belong to the activity pool InrtlWrist was pretrained on (unlabeled windows "
+           "from all participants; UTD-MHAD is in the pool configuration but contributes no windows), so InrtlWrist's rows are not "
+           "leak-free and the five matched objectives were not run here. HarNet-5s is a released UK Biobank model run through the "
+           "benchmark unchanged. UT-Watch has only the HarNet cells so far.")
+    out.append('<p class="lb-note tt-cap" data-for="%s" hidden>%s</p>' % (pid, cap))
+    return "\n".join(out)
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--paper", default=os.path.expanduser("~/paper_arxiv"))
     ap.add_argument("--site", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "index.html"))
     a = ap.parse_args()
+    ap_results = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "bench", "results")
+    all_tabs = [(label, pid) for _, label, pid in TABLES] + [("Activity (pretraining pool)", "tt-pool")]
     tabs = '<div class="tabs tabs-wrap" role="tablist" aria-label="Task">' + "".join(
         '<button class="tab" role="tab" id="%s-tab" aria-controls="%s" aria-selected="%s" type="button">%s</button>' % (pid, pid, "true" if i == 0 else "false", label)
-        for i, (_, label, pid) in enumerate(TABLES)) + "</div>"
-    panels = "\n".join(render(stem, label, pid, a.paper) for stem, label, pid in TABLES)
+        for i, (label, pid) in enumerate(all_tabs)) + "</div>"
+    panels = "\n".join(render(stem, label, pid, a.paper) for stem, label, pid in TABLES) + "\n" + render_pool_har(ap_results)
     frag = "<!-- task-tables:start (generated by website/tools/make_task_tables_html.py; do not edit by hand) -->\n" + tabs + "\n" + panels + "\n<!-- task-tables:end -->"
     frag = frag.replace('id="tt-arm" role="tabpanel" aria-labelledby="tt-arm-tab" hidden', 'id="tt-arm" role="tabpanel" aria-labelledby="tt-arm-tab"')
     frag = frag.replace('data-for="tt-arm" hidden', 'data-for="tt-arm"')

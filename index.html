@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./static/css/site.css?v=12">
+  <link rel="stylesheet" href="./static/css/site.css?v=13">
 </head>
 <body id="top">
 
@@ -48,6 +48,7 @@
         <li><a href="#leaderboard">Leaderboard</a></li>
         <li><a href="#per-task">Per-task Leaderboard</a></li>
         <li><a href="#findings">Findings</a></li>
+        <li><a href="#checks">Evaluation checks</a></li>
         <li><a href="#tasks">Tasks</a></li>
         <li><a class="btn-mini" href="./paper/index.html">Read the paper</a></li>
       </ul>
@@ -175,63 +176,92 @@
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Leaderboard</span>
-      <h2>Primary metric of every task, one protocol at a time</h2>
-      <p>Six matched pretraining methods share the backbone, the corpus and every task recipe. Bold marks the best among them per column, ties included. Reference rows do not compete.</p>
+      <h2>Two tracks: a controlled comparison and an open board</h2>
+      <p>The <strong>controlled track</strong> fixes the corpus and the 21&nbsp;M-parameter backbone, so a row differs from another only in its pretraining objective. The <strong>open track</strong> takes any encoder, trained on any data at any scale, including released models from other groups. Both run the same ten task cards. Bold marks the best value in a column within the track, ties included; reference rows do not compete.</p>
     </div>
     <div class="reveal">
-      <div class="tabs" role="tablist" aria-label="Protocol">
-        <button class="tab" role="tab" aria-selected="true" aria-controls="lb-frozen" id="tab-frozen" type="button">Frozen probe</button>
-        <button class="tab" role="tab" aria-selected="false" aria-controls="lb-finetune" id="tab-finetune" type="button">Fine-tune</button>
-      </div>
-
-      <div class="lb-wrap" id="lb-frozen" role="tabpanel" aria-labelledby="tab-frozen">
-        <table class="lb">
-          <thead><tr>
-            <th>Encoder</th>
-            <th>Arm pose<small>cm &darr;</small></th><th>Full-body pose<small>MPJPE mm &darr;</small></th><th>Odometry<small>ATE m &darr;</small></th>
-            <th>Gesture<small>clip F1 &uarr;</small></th><th>IMU&ndash;text<small>R@1 &uarr;</small></th><th>Parkinson's<small>participant F1 &uarr;</small></th><th>Activity<small>mean F1 &uarr;</small></th>
-          </tr></thead>
-          <tbody>
-            <tr class="ours"><td>InrtlWrist (ours)</td><td class="b">8.14</td><td class="b">97.9</td><td class="b">0.200</td><td class="b">64.7</td><td class="b">27.9</td><td>55.2</td><td class="b">57.8</td></tr>
-            <tr><td>LIMU-BERT</td><td class="b">8.14</td><td>98.5</td><td>0.208</td><td>61.7</td><td>24.9</td><td>50.5</td><td>56.2</td></tr>
-            <tr><td>SimMTM</td><td>8.47</td><td>103.6</td><td>0.224</td><td>55.9</td><td>17.2</td><td>48.7</td><td>53.1</td></tr>
-            <tr><td>FOCAL</td><td>8.71</td><td>108.4</td><td>0.240</td><td>48.1</td><td>8.6</td><td>40.7</td><td>44.2</td></tr>
-            <tr><td>RelCon</td><td>8.50</td><td>104.3</td><td>0.215</td><td>38.5</td><td>13.2</td><td>40.5</td><td>35.4</td></tr>
-            <tr><td>SSL-Wearables</td><td>8.42</td><td>101.7</td><td>0.220</td><td>54.7</td><td>24.8</td><td class="b">57.4</td><td>55.1</td></tr>
-            <tr class="ref sep"><td>NormWear (released, 136 M)</td><td>8.39</td><td>107.7</td><td>0.295</td><td>43.8</td><td>15.5</td><td>56.6</td><td>38.2</td></tr>
-            <tr class="ref"><td>Random frozen encoder</td><td>8.46</td><td>105.0</td><td>0.233</td><td>36.4</td><td>9.5</td><td>51.7</td><td>26.2</td></tr>
-            <tr class="ref"><td>Same backbone, from scratch</td><td>8.21</td><td>92.7</td><td>0.162</td><td>60.8</td><td>23.2</td><td>29.9</td><td>53.3</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="lb-wrap" id="lb-finetune" role="tabpanel" aria-labelledby="tab-finetune" hidden>
-        <table class="lb">
-          <thead><tr>
-            <th>Encoder</th>
-            <th>Arm pose<small>cm &darr;</small></th><th>Full-body pose<small>MPJPE mm &darr;</small></th><th>Odometry<small>ATE m &darr;</small></th>
-            <th>Gesture<small>clip F1 &uarr;</small></th><th>IMU&ndash;text<small>R@1 &uarr;</small></th><th>Parkinson's<small>participant F1 &uarr;</small></th><th>Activity<small>mean F1 &uarr;</small></th>
-          </tr></thead>
-          <tbody>
-            <tr class="ours"><td>InrtlWrist (ours)</td><td class="b">8.01</td><td class="b">88.1</td><td class="b">0.154</td><td>54.2</td><td class="b">38.8</td><td class="b">51.9</td><td class="b">63.9</td></tr>
-            <tr><td>LIMU-BERT</td><td>8.18</td><td>89.7</td><td>0.158</td><td>57.3</td><td>36.6</td><td>46.0</td><td>56.1</td></tr>
-            <tr><td>SimMTM</td><td>8.44</td><td>92.9</td><td>0.163</td><td class="b">61.9</td><td>32.4</td><td>46.8</td><td>52.1</td></tr>
-            <tr><td>FOCAL</td><td>8.66</td><td>95.9</td><td>0.177</td><td>39.3</td><td>22.4</td><td>46.3</td><td>56.1</td></tr>
-            <tr><td>RelCon</td><td>8.55</td><td>92.1</td><td>0.167</td><td>42.7</td><td>30.0</td><td>49.1</td><td>52.8</td></tr>
-            <tr><td>SSL-Wearables</td><td>8.57</td><td>90.6</td><td>0.166</td><td>58.3</td><td>34.5</td><td>48.7</td><td>56.7</td></tr>
-            <tr class="ref sep"><td>NormWear (released, 136 M)</td><td>8.54</td><td>102.2</td><td>0.297</td><td>21.0</td><td>15.7</td><td>43.1</td><td>27.8</td></tr>
-            <tr class="ref"><td>Same backbone, from scratch</td><td>8.21</td><td>92.7</td><td>0.162</td><td>60.8</td><td>23.2</td><td>29.9</td><td>53.3</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="lb-note">Activity is the mean macro-F1 over HHAR, MHEALTH, PRISM and TransfHAR. Gesture and Parkinson's are the OpenWatch test split and the PADS participant metric. NormWear is a released checkpoint run through the benchmark unchanged, with its own corpus and size. Secondary metrics for every cell are in the released result files. Submissions must consume the benchmark's raw input (one wrist, six channels at 50&nbsp;Hz, the released windows and splits) under the released decoders and recipes; how an encoder normalizes or otherwise preprocesses that input is the submitter's choice, declared with the encoder.</p>
+<!-- tracks:start (generated by python -m bench.leaderboard_tracks; do not edit by hand) -->
+<div class="tabs" role="tablist" aria-label="Track">
+<button class="tab" role="tab" aria-selected="true" aria-controls="trk-controlled" id="trk-controlled-tab" type="button">Controlled track</button>
+<button class="tab" role="tab" aria-selected="false" aria-controls="trk-open" id="trk-open-tab" type="button">Open track</button>
+</div>
+<div class="trk" id="trk-controlled" role="tabpanel" aria-labelledby="trk-controlled-tab">
+<p class="lb-intro"><strong>With the corpus and the model held fixed, which pretraining objective gives the most useful wrist-IMU representation?</strong> Pretrain only on the released IMU-Bench corpus (197,094 unlabeled wrist windows; built with scripts/build_multidata_cache.py from the sources listed in DATASETS.md). Use the shared backbone, a 12-layer, width-384 ViT over 0.32 s patches (21 M parameters, imu_lm/models/ViT1D), and the shared pretraining trainer (scripts/run_pretrain.py). At most 160,000 pretraining updates, checkpoint selected on the corpus validation split. Only the objective (loss, views, masking, heads discarded after pretraining) is free.</p>
+<div class="tabs" role="tablist" aria-label="Protocol, Controlled track">
+<button class="tab" role="tab" aria-selected="true" aria-controls="lb-controlled-probe" id="tab-controlled-probe" type="button">Frozen probe</button>
+<button class="tab" role="tab" aria-selected="false" aria-controls="lb-controlled-finetune" id="tab-controlled-finetune" type="button">Fine-tune</button>
+</div>
+<div class="lb-wrap" id="lb-controlled-probe" role="tabpanel" aria-labelledby="tab-controlled-probe">
+<table class="lb">
+<thead><tr><th>Encoder</th><th>Arm pose<small>cm &darr;</small></th><th>Full-body pose<small>MPJPE mm &darr;</small></th><th>Odometry<small>ATE m &darr;</small></th><th>Gesture<small>clip F1 &uarr;</small></th><th>IMU–text<small>R@1 &uarr;</small></th><th>Parkinson's<small>participant F1 &uarr;</small></th><th>Activity<small>mean F1 &uarr;</small></th><th>Mean rank<small>&darr;</small></th></tr></thead>
+<tbody>
+<tr><td>InrtlWrist (benchmark authors)</td><td class="b">8.14</td><td class="b">97.9</td><td class="b">0.200</td><td class="b">64.7</td><td class="b">27.9</td><td>55.2</td><td class="b">57.8</td><td>1.21</td></tr>
+<tr><td>LIMU-BERT</td><td class="b">8.14</td><td>98.5</td><td>0.208</td><td>61.7</td><td>24.9</td><td>50.5</td><td>56.2</td><td>2.07</td></tr>
+<tr><td>SSL-Wearables</td><td>8.42</td><td>101.7</td><td>0.220</td><td>54.7</td><td>24.8</td><td class="b">57.4</td><td>55.1</td><td>3.00</td></tr>
+<tr><td>SimMTM</td><td>8.47</td><td>103.6</td><td>0.224</td><td>55.9</td><td>17.2</td><td>48.7</td><td>53.1</td><td>4.00</td></tr>
+<tr><td>RelCon</td><td>8.50</td><td>104.3</td><td>0.215</td><td>38.5</td><td>13.2</td><td>40.5</td><td>35.4</td><td>5.14</td></tr>
+<tr><td>FOCAL</td><td>8.71</td><td>108.4</td><td>0.240</td><td>48.1</td><td>8.6</td><td>40.7</td><td>44.2</td><td>5.57</td></tr>
+<tr class="ref sep"><td>Never-trained encoder, frozen (decoder alone)</td><td>8.46</td><td>105.0</td><td>0.233</td><td>36.4</td><td>9.5</td><td>51.7</td><td>26.2</td><td></td></tr>
+<tr class="ref"><td>Raw input, 0 layers (decoder alone)</td><td>8.51</td><td>106.4</td><td>0.256</td><td>11.4</td><td>0.5</td><td>12.6</td><td>5.6</td><td></td></tr>
+<tr class="ref"><td>Same backbone, trained from scratch</td><td>8.21</td><td>92.7</td><td>0.162</td><td>60.8</td><td>23.2</td><td>29.9</td><td>53.3</td><td></td></tr>
+</tbody>
+</table>
+</div>
+<div class="lb-wrap" id="lb-controlled-finetune" role="tabpanel" aria-labelledby="tab-controlled-finetune" hidden>
+<table class="lb">
+<thead><tr><th>Encoder</th><th>Arm pose<small>cm &darr;</small></th><th>Full-body pose<small>MPJPE mm &darr;</small></th><th>Odometry<small>ATE m &darr;</small></th><th>Gesture<small>clip F1 &uarr;</small></th><th>IMU–text<small>R@1 &uarr;</small></th><th>Parkinson's<small>participant F1 &uarr;</small></th><th>Activity<small>mean F1 &uarr;</small></th><th>Mean rank<small>&darr;</small></th></tr></thead>
+<tbody>
+<tr><td>InrtlWrist (benchmark authors)</td><td class="b">8.01</td><td class="b">88.1</td><td class="b">0.154</td><td>54.2</td><td class="b">38.8</td><td class="b">51.9</td><td class="b">63.9</td><td>1.43</td></tr>
+<tr><td>LIMU-BERT</td><td>8.18</td><td>89.7</td><td>0.158</td><td>57.3</td><td>36.6</td><td>46.0</td><td>56.1</td><td>2.93</td></tr>
+<tr><td>SSL-Wearables</td><td>8.57</td><td>90.6</td><td>0.166</td><td>58.3</td><td>34.5</td><td>48.7</td><td>56.7</td><td>3.14</td></tr>
+<tr><td>SimMTM</td><td>8.44</td><td>92.9</td><td>0.163</td><td class="b">61.9</td><td>32.4</td><td>46.8</td><td>52.1</td><td>3.71</td></tr>
+<tr><td>RelCon</td><td>8.55</td><td>92.1</td><td>0.167</td><td>42.7</td><td>30.0</td><td>49.1</td><td>52.8</td><td>4.29</td></tr>
+<tr><td>FOCAL</td><td>8.66</td><td>95.9</td><td>0.177</td><td>39.3</td><td>22.4</td><td>46.3</td><td>56.1</td><td>5.50</td></tr>
+<tr class="ref sep"><td>Same backbone, trained from scratch</td><td>8.21</td><td>92.7</td><td>0.162</td><td>60.8</td><td>23.2</td><td>29.9</td><td>53.3</td><td></td></tr>
+</tbody>
+</table>
+</div>
+<p class="lb-note">Being evaluated: DINO (10 of 20 cells); I-JEPA (4 of 20 cells).</p>
+</div>
+<div class="trk" id="trk-open" role="tabpanel" aria-labelledby="trk-open-tab" hidden>
+<p class="lb-intro"><strong>What is the best wrist-IMU encoder that anyone can train or download, at any scale?</strong> Any architecture, size, pretraining corpus and objective. Weights must be public, or released with the submission. The pretraining corpus must not contain any recording from the evaluation splits of the ten tasks; declare it in the encoder card (pretrain_data) so it can be audited. Same raw input, task cards and scorers as the controlled track. Input normalisation and other preprocessing inside the encoder are the submitter's choice (normalize_method in the card).</p>
+<div class="tabs" role="tablist" aria-label="Protocol, Open track">
+<button class="tab" role="tab" aria-selected="true" aria-controls="lb-open-probe" id="tab-open-probe" type="button">Frozen probe</button>
+<button class="tab" role="tab" aria-selected="false" aria-controls="lb-open-finetune" id="tab-open-finetune" type="button">Fine-tune</button>
+</div>
+<div class="lb-wrap" id="lb-open-probe" role="tabpanel" aria-labelledby="tab-open-probe">
+<table class="lb">
+<thead><tr><th>Encoder</th><th>Arm pose<small>cm &darr;</small></th><th>Full-body pose<small>MPJPE mm &darr;</small></th><th>Odometry<small>ATE m &darr;</small></th><th>Gesture<small>clip F1 &uarr;</small></th><th>IMU–text<small>R@1 &uarr;</small></th><th>Parkinson's<small>participant F1 &uarr;</small></th><th>Activity<small>mean F1 &uarr;</small></th><th>Mean rank<small>&darr;</small></th></tr></thead>
+<tbody>
+<tr><td>InrtlWrist (benchmark authors)<small>21 M &middot; IMU-Bench corpus, 197,094 windows (recorded + simulated wrist motion) &middot; <a href="https://huggingface.co/YiquanLi/InrtlWrist">released weights</a> &middot; run by benchmark authors</small></td><td class="b">8.14</td><td class="b">97.9</td><td class="b">0.200</td><td class="b">64.7</td><td class="b">27.9</td><td>55.2</td><td class="b">57.8</td><td>1.14</td></tr>
+<tr><td>NormWear (Luo et al., 2024)<small>136 M &middot; ~2.5 M segments of PPG, ECG, EEG, GSR and IMU signals &middot; <a href="https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear">released weights</a> &middot; run by benchmark authors, from the released weights &middot; five cells ran under a step cap (full-body fine-tune, both odometry cells and both Parkinson's cells)</small></td><td>8.39</td><td>107.7</td><td>0.295</td><td>43.8</td><td>15.5</td><td class="b">56.6</td><td>38.2</td><td>1.86</td></tr>
+<tr class="ref sep"><td>Never-trained encoder, frozen (decoder alone)</td><td>8.46</td><td>105.0</td><td>0.233</td><td>36.4</td><td>9.5</td><td>51.7</td><td>26.2</td><td></td></tr>
+<tr class="ref"><td>Raw input, 0 layers (decoder alone)</td><td>8.51</td><td>106.4</td><td>0.256</td><td>11.4</td><td>0.5</td><td>12.6</td><td>5.6</td><td></td></tr>
+<tr class="ref"><td>Same backbone, trained from scratch</td><td>8.21</td><td>92.7</td><td>0.162</td><td>60.8</td><td>23.2</td><td>29.9</td><td>53.3</td><td></td></tr>
+</tbody>
+</table>
+</div>
+<div class="lb-wrap" id="lb-open-finetune" role="tabpanel" aria-labelledby="tab-open-finetune" hidden>
+<table class="lb">
+<thead><tr><th>Encoder</th><th>Arm pose<small>cm &darr;</small></th><th>Full-body pose<small>MPJPE mm &darr;</small></th><th>Odometry<small>ATE m &darr;</small></th><th>Gesture<small>clip F1 &uarr;</small></th><th>IMU–text<small>R@1 &uarr;</small></th><th>Parkinson's<small>participant F1 &uarr;</small></th><th>Activity<small>mean F1 &uarr;</small></th><th>Mean rank<small>&darr;</small></th></tr></thead>
+<tbody>
+<tr><td>InrtlWrist (benchmark authors)<small>21 M &middot; IMU-Bench corpus, 197,094 windows (recorded + simulated wrist motion) &middot; <a href="https://huggingface.co/YiquanLi/InrtlWrist">released weights</a> &middot; run by benchmark authors</small></td><td class="b">8.01</td><td class="b">88.1</td><td class="b">0.154</td><td class="b">54.2</td><td class="b">38.8</td><td class="b">51.9</td><td class="b">63.9</td><td>1.00</td></tr>
+<tr><td>NormWear (Luo et al., 2024)<small>136 M &middot; ~2.5 M segments of PPG, ECG, EEG, GSR and IMU signals &middot; <a href="https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear">released weights</a> &middot; run by benchmark authors, from the released weights &middot; five cells ran under a step cap (full-body fine-tune, both odometry cells and both Parkinson's cells)</small></td><td>8.54</td><td>102.2</td><td>0.297</td><td>21.0</td><td>15.7</td><td>43.1</td><td>27.8</td><td>2.00</td></tr>
+<tr class="ref sep"><td>Same backbone, trained from scratch</td><td>8.21</td><td>92.7</td><td>0.162</td><td>60.8</td><td>23.2</td><td>29.9</td><td>53.3</td><td></td></tr>
+</tbody>
+</table>
+</div>
+<p class="lb-note">Being evaluated: HarNet5 (Yuan et al., 2024) (16 of 20 cells); Inertia-1 PatchTST-S (Xu et al., 2026) (12 of 20 cells); Inertia-1 AR-Transformer-S (Xu et al., 2026) (12 of 20 cells). InrtlWrist was developed by the benchmark authors together with the task cards. The cards' decoders, budgets and selection rules are shared unchanged by every row, are not tuned per encoder, and may not be tuned by submitters either. Rows marked "from the released weights" were run by the benchmark authors with the other groups' public checkpoints and preprocessing; their authors are welcome to resubmit. &dagger; No official checkpoint has been released; pretrained by us with the authors' code and recipe, and replaced by the official weights when they appear. Not on the board yet: RelCon (Xu et al., ICLR 2025): weights not released ("we cannot release the pre-training dataset or the associated model weights", github.com/maxxu05/relcon); the objective is in the controlled track as relcon_5src. Inertia-1 (Xu et al., 2026), official checkpoints: code only as of 2026-10-14 (github.com/yang-ai-lab/Inertia-1); our NHANES reproduction is in the open track and will be replaced by the official weights once released. IMUDINO: no public code or weights found as of 2026-10-14.</p>
+</div>
+<!-- tracks:end -->
+      <p class="lb-note">Activity is the mean macro-F1 over HHAR, MHEALTH, PRISM and TransfHAR. Gesture and Parkinson's are the OpenWatch test split and the PADS participant metric. Mean rank is taken over the seven columns within a track and protocol. Secondary metrics for every cell are in the released result files.</p>
 
       <div class="lb-sub" id="per-task">
         <h3>Per-task Leaderboard</h3>
         <p class="lb-intro">Every metric of every encoder on each task, as in the paper appendix. One training seed per cell. Task-specific systems are listed for orientation and are not ranked.</p>
       </div>
       <!-- task-tables:start (generated by website/tools/make_task_tables_html.py; do not edit by hand) -->
-<div class="tabs tabs-wrap" role="tablist" aria-label="Task"><button class="tab" role="tab" id="tt-arm-tab" aria-controls="tt-arm" aria-selected="true" type="button">Arm pose</button><button class="tab" role="tab" id="tt-body-tab" aria-controls="tt-body" aria-selected="false" type="button">Full-body pose</button><button class="tab" role="tab" id="tt-odom-tab" aria-controls="tt-odom" aria-selected="false" type="button">Odometry</button><button class="tab" role="tab" id="tt-gesture-tab" aria-controls="tt-gesture" aria-selected="false" type="button">Microgesture</button><button class="tab" role="tab" id="tt-text-tab" aria-controls="tt-text" aria-selected="false" type="button">IMU–text</button><button class="tab" role="tab" id="tt-pd-tab" aria-controls="tt-pd" aria-selected="false" type="button">Parkinson's</button><button class="tab" role="tab" id="tt-har-tab" aria-controls="tt-har" aria-selected="false" type="button">Activity</button></div>
+<div class="tabs tabs-wrap" role="tablist" aria-label="Task"><button class="tab" role="tab" id="tt-arm-tab" aria-controls="tt-arm" aria-selected="true" type="button">Arm pose</button><button class="tab" role="tab" id="tt-body-tab" aria-controls="tt-body" aria-selected="false" type="button">Full-body pose</button><button class="tab" role="tab" id="tt-odom-tab" aria-controls="tt-odom" aria-selected="false" type="button">Odometry</button><button class="tab" role="tab" id="tt-gesture-tab" aria-controls="tt-gesture" aria-selected="false" type="button">Microgesture</button><button class="tab" role="tab" id="tt-text-tab" aria-controls="tt-text" aria-selected="false" type="button">IMU–text</button><button class="tab" role="tab" id="tt-pd-tab" aria-controls="tt-pd" aria-selected="false" type="button">Parkinson's</button><button class="tab" role="tab" id="tt-har-tab" aria-controls="tt-har" aria-selected="false" type="button">Activity</button><button class="tab" role="tab" id="tt-pool-tab" aria-controls="tt-pool" aria-selected="false" type="button">Activity (pretraining pool)</button></div>
 <div class="lb-wrap" id="tt-arm" role="tabpanel" aria-labelledby="tt-arm-tab">
 <table class="lb">
 <thead>
@@ -359,7 +389,7 @@
 <div class="lb-wrap" id="tt-text" role="tabpanel" aria-labelledby="tt-text-tab" hidden>
 <table class="lb">
 <thead>
-<tr><th></th><th colspan="1"></th><th class="grp" colspan="4">Gallery of 100</th><th class="grp" colspan="4">Full gallery</th></tr>
+<tr><th colspan="1"></th><th colspan="1"></th><th class="grp" colspan="4">Gallery of 100</th><th class="grp" colspan="4">Full gallery</th></tr>
 <tr><th>Encoder</th><th>R@1 mean ↑</th><th>i2t R@1 ↑</th><th>t2i R@1 ↑</th><th>i2t MRR ↑</th><th>t2i MRR ↑</th><th>i2t R@1 ↑</th><th>t2i R@1 ↑</th><th>i2t MRR ↑</th><th>t2i MRR ↑</th></tr>
 </thead><tbody>
 <tr class="section sep"><td colspan="10"><em>Frozen probe</em></td></tr>
@@ -390,7 +420,7 @@
 <div class="lb-wrap" id="tt-pd" role="tabpanel" aria-labelledby="tt-pd-tab" hidden>
 <table class="lb">
 <thead>
-<tr><th></th><th class="grp" colspan="2">Per subject</th><th class="grp" colspan="3">Per window</th></tr>
+<tr><th colspan="1"></th><th class="grp" colspan="2">Per subject</th><th class="grp" colspan="3">Per window</th></tr>
 <tr><th>Encoder</th><th>macro-F1 ↑</th><th>bal-acc ↑</th><th>bal-acc ↑</th><th>macro-F1 ↑</th><th>acc ↑</th></tr>
 </thead><tbody>
 <tr class="section sep"><td colspan="6"><em>Frozen probe</em></td></tr>
@@ -421,10 +451,10 @@
 <div class="lb-wrap" id="tt-har" role="tabpanel" aria-labelledby="tt-har-tab" hidden>
 <table class="lb">
 <thead>
-<tr><th></th><th>\multicolumn{3}{c}{HHAR}</th><th>\multicolumn{3}{c}{MHEALTH}</th><th>\multicolumn{3}{c}{PRISM}</th><th>\multicolumn{3}{c}{TransfHAR}</th><th>Mean</th></tr>
+<tr><th colspan="1"></th><th class="grp" colspan="3">HHAR</th><th class="grp" colspan="3">MHEALTH</th><th class="grp" colspan="3">PRISM</th><th class="grp" colspan="3">TransfHAR</th><th class="grp" colspan="1">Mean</th></tr>
+<tr><th>Encoder</th><th>macro-F1 ↑</th><th>bal-acc ↑</th><th>acc ↑</th><th>macro-F1 ↑</th><th>bal-acc ↑</th><th>acc ↑</th><th>macro-F1 ↑</th><th>bal-acc ↑</th><th>acc ↑</th><th>macro-F1 ↑</th><th>bal-acc ↑</th><th>acc ↑</th><th>macro-F1 ↑</th></tr>
 </thead><tbody>
-<tr class="sep"><td>Encoder</td><td>macro-F1 ↑</td><td>bal-acc ↑</td><td>acc ↑</td><td>macro-F1 ↑</td><td>bal-acc ↑</td><td>acc ↑</td><td>macro-F1 ↑</td><td>bal-acc ↑</td><td>acc ↑</td><td>macro-F1 ↑</td><td>bal-acc ↑</td><td>acc ↑</td><td>macro-F1 ↑</td></tr>
-<tr class="section sep"><td colspan="6"><em>Frozen probe</em></td></tr>
+<tr class="section sep"><td colspan="14"><em>Frozen probe</em></td></tr>
 <tr class="ours"><td>InrtlWrist (Ours)</td><td>62.1</td><td>62.7</td><td>61.9</td><td>68.6</td><td>70.0</td><td>68.3</td><td>27.9</td><td>27.2</td><td>67.0</td><td>72.7</td><td>72.2</td><td>73.0</td><td>57.8</td></tr>
 <tr class=""><td>LIMU-BERT</td><td>61.2</td><td>60.8</td><td>59.9</td><td>67.6</td><td>68.1</td><td>66.3</td><td>25.1</td><td>25.1</td><td>66.0</td><td>71.1</td><td>70.3</td><td>71.4</td><td>56.2</td></tr>
 <tr class=""><td>SimMTM</td><td>57.5</td><td>57.8</td><td>56.8</td><td>61.4</td><td>63.1</td><td>62.5</td><td>26.7</td><td>26.3</td><td>66.9</td><td>66.8</td><td>67.2</td><td>68.7</td><td>53.1</td></tr>
@@ -435,7 +465,7 @@
 <tr class=""><td>InrtlWrist, accelerometer only</td><td>57.8</td><td>58.3</td><td>58.8</td><td>68.5</td><td>70.8</td><td>69.3</td><td>28.0</td><td>27.2</td><td>66.5</td><td>69.5</td><td>69.0</td><td>70.0</td><td>55.9</td></tr>
 <tr class="sep ref"><td>Random frozen encoder</td><td>32.4</td><td>36.2</td><td>37.7</td><td>46.6</td><td>48.9</td><td>51.8</td><td>16.1</td><td>20.2</td><td>64.1</td><td>9.7</td><td>12.1</td><td>17.7</td><td>26.2</td></tr>
 <tr class="ref"><td>Raw input, 0 layers</td><td>5.3</td><td>16.7</td><td>19.0</td><td>1.4</td><td>8.3</td><td>9.2</td><td>15.6</td><td>20.0</td><td>64.2</td><td>0.1</td><td>1.7</td><td>4.6</td><td>5.6</td></tr>
-<tr class="section sep"><td colspan="6"><em>Fine-tune</em></td></tr>
+<tr class="section sep"><td colspan="14"><em>Fine-tune</em></td></tr>
 <tr class="ours"><td>InrtlWrist (Ours)</td><td>60.3</td><td>61.0</td><td>60.2</td><td>72.4</td><td>74.9</td><td>73.7</td><td>36.8</td><td>36.2</td><td>67.8</td><td>86.1</td><td>85.4</td><td>85.9</td><td>63.9</td></tr>
 <tr class=""><td>LIMU-BERT</td><td>56.3</td><td>58.5</td><td>57.2</td><td>62.9</td><td>69.2</td><td>68.1</td><td>29.5</td><td>29.2</td><td>64.9</td><td>75.8</td><td>76.3</td><td>78.3</td><td>56.1</td></tr>
 <tr class=""><td>SimMTM</td><td>47.0</td><td>48.1</td><td>48.4</td><td>56.8</td><td>62.8</td><td>62.3</td><td>30.8</td><td>30.6</td><td>67.3</td><td>73.7</td><td>74.3</td><td>74.6</td><td>52.1</td></tr>
@@ -445,10 +475,27 @@
 <tr class=""><td>InrtlWrist, plain attention</td><td>52.6</td><td>54.9</td><td>55.2</td><td>68.6</td><td>72.7</td><td>71.4</td><td>36.2</td><td>35.3</td><td>70.0</td><td>78.6</td><td>78.1</td><td>79.8</td><td>59.0</td></tr>
 <tr class=""><td>InrtlWrist, accelerometer only</td><td>56.8</td><td>57.9</td><td>58.0</td><td>68.3</td><td>70.7</td><td>68.8</td><td>29.8</td><td>29.5</td><td>67.5</td><td>77.2</td><td>76.6</td><td>77.8</td><td>58.0</td></tr>
 <tr class="sep ref"><td>Scratch</td><td>48.8</td><td>50.3</td><td>49.6</td><td>63.2</td><td>66.2</td><td>65.2</td><td>27.8</td><td>27.2</td><td>68.5</td><td>73.5</td><td>73.4</td><td>74.4</td><td>53.3</td></tr>
-<tr class="section sep"><td colspan="6"><em>Task-specific systems (not ranked)</em></td></tr>
+<tr class="section sep"><td colspan="14"><em>Task-specific systems (not ranked)</em></td></tr>
 <tr class="ref"><td>DeepConvLSTM (Ordóñez \</td><td>Roggen)</td><td>44.8</td><td>46.6</td><td>44.8</td><td>55.6</td><td>59.5</td><td>60.2</td><td>35.6</td><td>34.0</td><td>70.6</td><td>71.6</td><td>72.9</td><td>72.8</td><td>51.9</td></tr>
 </tbody></table></div>
 <p class="lb-note tt-cap" data-for="tt-har" hidden>Activity recognition (macro-F1, %) on the HHAR, MHEALTH and PRISM, which are subject-disjoint, and TransfHAR, which is split in time, with their mean.</p>
+<div class="lb-wrap" id="tt-pool" role="tabpanel" aria-labelledby="tt-pool-tab" hidden>
+<table class="lb">
+<thead>
+<tr><th>Encoder</th><th>WISDM<small>macro-F1 &uarr;</small></th><th>PAMAP2<small>macro-F1 &uarr;</small></th><th>RecoFit<small>macro-F1 &uarr;</small></th><th>UTD-MHAD<small>macro-F1 &uarr;</small></th><th>SAMoSA<small>macro-F1 &uarr;</small></th><th>UT-Watch<small>macro-F1 &uarr;</small></th><th>Mean<small>over available sets</small></th></tr>
+</thead><tbody>
+<tr class="section sep"><td colspan="8"><em>Frozen probe</em></td></tr>
+<tr class="ours"><td>InrtlWrist (Ours)</td><td>63.0</td><td>56.1</td><td>65.7</td><td>66.5</td><td>46.7</td><td>&ndash;</td><td>59.6<small>5 sets</small></td></tr>
+<tr class="ref"><td>HarNet-5s (released, UK Biobank)</td><td>54.6</td><td>44.1</td><td>48.5</td><td>48.7</td><td>34.2</td><td>38.6</td><td>44.8<small>6 sets</small></td></tr>
+<tr class="section sep"><td colspan="8"><em>Fine-tune</em></td></tr>
+<tr class="ours"><td>InrtlWrist (Ours)</td><td>71.1</td><td>41.0</td><td>75.6</td><td>66.9</td><td>52.1</td><td>&ndash;</td><td>61.4<small>5 sets</small></td></tr>
+<tr class="ref"><td>HarNet-5s (released, UK Biobank)</td><td>59.0</td><td>39.7</td><td>74.5</td><td>76.4</td><td>61.4</td><td>50.0</td><td>60.2<small>6 sets</small></td></tr>
+<tr class="section sep"><td colspan="8"><em>From scratch</em></td></tr>
+<tr class="ref"><td>Same backbone, scratch</td><td>60.6</td><td>21.9</td><td>66.3</td><td>70.1</td><td>39.5</td><td>&ndash;</td><td>51.7<small>5 sets</small></td></tr>
+<tr class="section sep"><td colspan="8"><em>Task-specific systems (not ranked)</em></td></tr>
+<tr class="ref"><td>DeepConvLSTM (Ordóñez &amp; Roggen)</td><td>70.0</td><td>29.2</td><td>72.1</td><td>51.8</td><td>&ndash;</td><td>&ndash;</td><td>55.8<small>4 sets</small></td></tr>
+</tbody></table></div>
+<p class="lb-note tt-cap" data-for="tt-pool" hidden>Activity recognition on the six datasets of the pretraining pool: window macro-F1 (%) on each set's subject-disjoint validation split, one seed, the benchmark's HAR recipe (2.56 s windows, linear probe or full fine-tune). These sets are not evaluation tasks in the paper because they belong to the activity pool InrtlWrist was pretrained on (unlabeled windows from all participants; UTD-MHAD is in the pool configuration but contributes no windows), so InrtlWrist's rows are not leak-free and the five matched objectives were not run here. HarNet-5s is a released UK Biobank model run through the benchmark unchanged. UT-Watch has only the HarNet cells so far.</p>
 <!-- task-tables:end -->
     </div>
   </div>
@@ -588,14 +635,37 @@
   </div>
 </section>
 
-<!-- ============ Also worth knowing ============ -->
-<section class="section alt" id="notes">
+<!-- ============ Evaluation checks ============ -->
+<section class="section alt" id="checks">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="kicker">Also worth knowing</span>
-      <h2>Protocol choices move the numbers</h2>
-      <p>A few results from the ablations that change how wrist-IMU benchmarks should be read.</p>
+      <span class="kicker">Evaluation checks</span>
+      <h2>Five checks for any wrist-IMU evaluation</h2>
+      <p>These hold whichever model leads the board. Each comes from a problem we found while building IMU-Bench. The harness applies the first four to every row, ours included, and the fifth is a property of the split that every row shares. The details are in the paper's data-audit and decoder-capacity appendices.</p>
     </div>
+    <ul class="blist reveal">
+      <li><details class="bl-item a-cli" open>
+        <summary><span class="bl-dot"></span>1. Hash a release before splitting it by participant<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
+        <div class="bl-body"><p>OpenWatch's 50 participant ids are 43 people: byte-identical recordings appear under different ids, and all 35 motion-augmented ids are wrist-mirrored copies of real participants. The release's own split places a copy of training participant 46 in its test set as id 48. IMU-Bench groups files by content hash and splits over the 43 canonical identities.</p></div>
+      </details></li>
+      <li><details class="bl-item a-cli" open>
+        <summary><span class="bl-dot"></span>2. Check the pretraining pool against every evaluation set<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
+        <div class="bl-body"><p>Common activity pools, ours included, bundle WISDM, PAMAP2, RecoFit, SAMoSA, Shoaib and UT-Watch, so those sets are not used for evaluation. An earlier corpus of ours contained the Nymeria and HumanML3D training splits and OpenWatch recordings whose training part included all five gesture test participants. Every open-track encoder card declares its pretraining data so that it can be checked the same way.</p></div>
+      </details></li>
+      <li><details class="bl-item a-kin" open>
+        <summary><span class="bl-dot"></span>3. Run a never-trained encoder through the same decoder<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
+        <div class="bl-body"><p>On full-body pose, pretraining beats a never-trained encoder by 9.7&nbsp;mm with a linear readout and 7.1&nbsp;mm with the benchmark decoder, but by only 0.3&nbsp;mm once four temporal layers are added; a 12-layer odometry decoder lets the untrained encoder beat every pretrained one. A strong decoder can hide the representation it reads. The task cards fix light decoders, and the leaderboard prints the decoder-alone rows in every column.</p></div>
+      </details></li>
+      <li><details class="bl-item a-sem" open>
+        <summary><span class="bl-dot"></span>4. Verify sensor units for every source<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
+        <div class="bl-body"><p>EatingSpeed stores the gyroscope in deg/s while the other sources use rad/s, a factor of 57, and OpenWatch stores raw sensor counts (4,096 per g). Per-window z-scoring hides such errors; physical-unit pipelines do not. The harness converts units on load and rejects a source whose still windows have a median gyroscope magnitude above 0.3&nbsp;rad/s.</p></div>
+      </details></li>
+      <li><details class="bl-item a-sem" open>
+        <summary><span class="bl-dot"></span>5. Know when an official split is partly transductive<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
+        <div class="bl-body"><p>The official HumanML3D split cuts some AMASS recordings into several clips, so 437 of its 2,192 test clips share frames with a training or validation clip, and every split list pairs each clip with a mirrored copy. The overlap affects every encoder equally, but retrieval scores on this split are partly transductive.</p></div>
+      </details></li>
+    </ul>
+    <h3 class="reveal" style="margin-top:2.2rem">Also worth knowing</h3>
     <ul class="blist reveal">
       <li><details class="bl-item a-sem">
         <summary><span class="bl-dot"></span>Frozen or fine-tuned depends on the task<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
@@ -604,10 +674,6 @@
       <li><details class="bl-item a-kin">
         <summary><span class="bl-dot"></span>The gyroscope matters for kinematics and retrieval<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
         <div class="bl-body"><p>Accelerometer-only pretraining raises every kinematic error under both protocols and lowers frozen IMU&ndash;text Recall@1 from 27.9 to 20.7, while mean activity F1 only moves from 57.8 to 55.9.</p></div>
-      </details></li>
-      <li><details class="bl-item a-cli">
-        <summary><span class="bl-dot"></span>Audit the corpus before you split<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
-        <div class="bl-body"><p>Every pretraining corpus is checked against every evaluation set, and evaluation datasets are excluded from pretraining. OpenWatch's duplicated and mirrored participant records are merged into canonical identities before the subject split, and sensor units are verified for every source.</p></div>
       </details></li>
     </ul>
   </div>
@@ -667,12 +733,13 @@
   <div class="wrap reveal">
     <span class="kicker">IMU-Bench</span>
     <h2>A benchmark, a model and a map of what transfers</h2>
-    <p>IMU-Bench separates broad downstream usefulness from complementary task supervision. Code, task cards, splits, the pretrained InrtlWrist encoder and every per-cell result file will be released with the paper.</p>
+    <p>IMU-Bench separates broad downstream usefulness from complementary task supervision. Code, task cards, splits, the pretrained InrtlWrist encoder and every per-cell result file are public, and the open track takes any model.</p>
     <div class="cta-row center">
       <a class="btn primary" href="./paper/index.html"><svg class="ic"><use href="#i-file"/></svg> Read the paper</a>
       <a class="btn ghost" href="https://github.com/SPICExLAB/IMU-Bench" target="_blank" rel="noopener"><svg class="ic"><use href="#i-code"/></svg> Code</a>
       <a class="btn ghost" href="#leaderboard"><svg class="ic"><use href="#i-board"/></svg> Leaderboard</a>
       <a class="btn ghost" href="https://huggingface.co/YiquanLi/InrtlWrist" target="_blank" rel="noopener"><svg class="ic"><use href="#i-model"/></svg> InrtlWrist weights</a>
+      <a class="btn ghost" href="https://github.com/SPICExLAB/IMU-Bench#evaluate-your-own-model" target="_blank" rel="noopener"><svg class="ic"><use href="#i-plus"/></svg> Submit a model</a>
     </div>
   </div>
 </section>
@@ -686,6 +753,7 @@
       <a href="#idea">The question</a>
       <a href="#leaderboard">Leaderboard</a>
       <a href="#per-task">Per-task Leaderboard</a>
+      <a href="#checks">Evaluation checks</a>
       <a href="#findings">Findings</a>
       <a href="#tasks">Tasks</a>
       <a href="./paper/index.html">Paper</a>
@@ -697,6 +765,6 @@
   </div>
 </footer>
 
-<script src="./static/js/site.js?v=12"></script>
+<script src="./static/js/site.js?v=13"></script>
 </body>
 </html>
