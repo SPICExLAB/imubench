@@ -395,3 +395,6 @@ table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px s
 .finding.fig-wide .f-text .lede, .finding.fig-wide .f-detail ul { font-size: .88rem; line-height: 1.5; }
 .finding.fig-wide .discover, .finding.fig-wide .back { font-size: .9rem; }
 .finding.fig-wide .f-fig figcaption { font-size: .78rem; }
+/* fix: images inside small panels must fill the card, never their natural width */
+.finding .f-fig.fig-sm img { max-width: 100%; width: 100%; height: auto; }
+.finding .f-fig.fig-sm { overflow: hidden; }
