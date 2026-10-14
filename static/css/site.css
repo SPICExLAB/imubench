@@ -372,3 +372,9 @@ table.lb th.grp { background: color-mix(in srgb, var(--accent-bg) 55%, var(--sur
 table.lb th { background: var(--accent); color: #fff; border-bottom: 1px solid var(--accent-d); }
 table.lb th small { color: rgba(255,255,255,.82); }
 table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px solid rgba(255,255,255,.25); }
+/* transfer finding: wider figure, smaller text */
+.finding.fig-wide { grid-template-columns: 1fr 2.3fr; gap: 2rem; }
+.finding.fig-wide .f-text h2 { font-size: clamp(1.25rem, 2.1vw, 1.6rem); margin-bottom: .7rem; }
+.finding.fig-wide .f-text .lede, .finding.fig-wide .f-detail ul { font-size: .93rem; }
+.finding.fig-wide .f-fig { padding: .5rem; }
+.finding.fig-wide .f-fig .two { gap: .5rem; }
