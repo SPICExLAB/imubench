@@ -44,10 +44,10 @@
     <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false"><svg class="ic"><use href="#i-menu"/></svg></button>
     <nav>
       <ul class="nav-links">
-        <li><a href="#findings">Findings</a></li>
-        <li><a href="#tasks">Tasks</a></li>
         <li><a href="#leaderboard">Leaderboard</a></li>
         <li><a href="#per-task">Per-task Leaderboard</a></li>
+        <li><a href="#findings">Findings</a></li>
+        <li><a href="#tasks">Tasks</a></li>
         <li><a class="btn-mini" href="./paper/index.html">Read the paper</a></li>
       </ul>
     </nav>
@@ -168,195 +168,8 @@
   </div>
 </section>
 
-<!-- ============ Finding 1 ============ -->
-<section class="section alt" id="findings">
-  <div class="wrap wrap-wide">
-    <div class="section-head reveal">
-      <span class="kicker">What we found</span>
-      <h2>Broad usefulness and compatible supervision are different things</h2>
-      <p>Six self-supervised objectives, one backbone, one corpus, three protocols. The numbers separate what a pretrained encoder carries from what task supervision adds or takes away.</p>
-    </div>
-
-    <div class="finding reveal" id="finding-model">
-      <div class="f-text">
-        <h2>One pretrained wrist encoder. Best or joint-best on nine of ten tasks.</h2>
-        <p class="lede">InrtlWrist, a masked autoencoder with alternating frame and global attention, leads the six matched methods under frozen probing on nine of ten primary metrics, and fine-tuning it beats training from scratch on nine of ten tasks.</p>
-        <button class="discover" type="button" aria-expanded="false"><span>Discover more</span><svg class="ic"><use href="#i-arrow-r"/></svg></button>
-        <div class="f-detail">
-          <ul>
-            <li><strong>Frozen probing.</strong> Best or joint-best on nine of ten primary metrics among the six matched methods; SSL-Wearables leads on Parkinson's disease.</li>
-            <li><strong>Fine-tuning beats scratch on nine of ten tasks.</strong> Full-body MPJPE falls from 97.9 to 88.1&nbsp;mm (scratch 92.7), odometry ATE from 0.200 to 0.154&nbsp;m (scratch 0.162) and IMU&ndash;text Recall@1 rises from 27.9 to 38.8 (scratch 23.2).</li>
-            <li><strong>Gesture is the exception.</strong> Frozen InrtlWrist reaches 64.7 clip F1, ahead of every fine-tuned matched method; fine-tuning it drops the score to 54.2.</li>
-            <li><strong>The readout alone is not enough.</strong> A random frozen encoder reaches 26.2 mean activity F1 under the same linear probe; pretraining lifts it to 57.8.</li>
-          </ul>
-          <button class="back" type="button"><svg class="ic"><use href="#i-arrow-l"/></svg> Go back</button>
-        </div>
-      </div>
-      <figure class="f-fig">
-        <img src="./static/images/main_radar.png" alt="Two radar charts, frozen probe and fine-tune, over seven task axes (arm, body, odometry, gesture, text, Parkinson's disease, activity). InrtlWrist traces the largest polygon in both; training from scratch is drawn dashed.">
-        <figcaption>Downstream performance across task families. Each axis is normalized to the best score across both panels; larger radii are better. Activity averages macro-F1 over four datasets. Click a figure to enlarge.</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- ============ Finding 2 ============ -->
-<section class="section" id="transfer">
-  <div class="wrap wrap-wide">
-    <div class="finding flip reveal" id="finding-transfer">
-      <div class="f-text">
-        <h2>Supervision for one task can benefit another, but not every pair is complementary.</h2>
-        <p class="lede">Seven supervised source encoders, each trained from scratch on one task, are evaluated on the other six. Kinematic supervision transfers to kinematic targets, and with fine-tuning every source improves IMU&ndash;text retrieval and Parkinson's. Under frozen probing, language retrieval stays with the pretrained encoder, and joint training gains on one task at a cost to its partner.</p>
-        <button class="discover" type="button" aria-expanded="false"><span>Discover more</span><svg class="ic"><use href="#i-arrow-r"/></svg></button>
-        <div class="f-detail">
-          <ul>
-            <li><strong>Frozen transfer.</strong> Supervised sources beat a random frozen encoder on 28 of 42 pairs. Kinematic targets gain most from kinematic sources: full-body supervision cuts odometry ATE from 0.233 to 0.186&nbsp;m. Five of the six kinematic transfers survive, at about half their size, on disjoint participants.</li>
-            <li><strong>Language stays with the pretrained encoder.</strong> Under frozen probing, no supervised source exceeds 11.8 Recall@1 on IMU&ndash;text, against 27.9 for InrtlWrist.</li>
-            <li><strong>With fine-tuning</strong>, 22 pairs improve over scratch and 20 decline. Every source improves IMU&ndash;text and Parkinson's; every source lowers gesture F1; no source improves odometry.</li>
-            <li><strong>Joint training</strong> with full-body pose improves odometry (0.154 to 0.149&nbsp;m) and gesture (54.2 to 65.0 F1) but raises body MPJPE and lowers frozen IMU&ndash;text recall.</li>
-          </ul>
-          <button class="back" type="button"><svg class="ic"><use href="#i-arrow-l"/></svg> Go back</button>
-        </div>
-      </div>
-      <figure class="f-fig">
-        <div class="two">
-          <img src="./static/images/transfer_frozen.png" alt="Heatmap of frozen cross-task transfer: source tasks in columns, targets in rows, colored by relative change against a random frozen encoder.">
-          <img src="./static/images/transfer_finetune.png" alt="Heatmap of cross-task transfer with fine-tuning: source tasks in columns, targets in rows, colored by relative change against target training from scratch.">
-        </div>
-        <figcaption>Cross-task transfer. Left: frozen transfer, colored against a random frozen encoder. Right: transfer with fine-tuning, colored against training from scratch. Green improves, orange-pink degrades, saturated at &plusmn;40%. MAE denotes InrtlWrist. Click a figure to enlarge.</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- ============ Ablations ============ -->
-<section class="section alt" id="ablations">
-  <div class="wrap wrap-wide">
-    <div class="section-head reveal">
-      <span class="kicker">Ablations</span>
-      <h2>Architecture and training ablations</h2>
-      <p>Three controls behind the protocol: how much the readout contributes to a frozen probe, whether more pretraining data helps, and what joint supervision trades away.</p>
-    </div>
-
-    <div class="finding reveal" id="abl-decoder">
-      <div class="f-text">
-        <h3>Decoder capacity</h3>
-        <p class="lede">We compare frozen pretrained and random encoders as decoder capacity increases. Pretraining reduces full-body MPJPE by 9.7&nbsp;mm with a linear readout and 7.1&nbsp;mm with the benchmark decoder. Increasing decoder width changes this gap little, whereas adding temporal layers reduces it below 1&nbsp;mm. A 12-layer odometry decoder similarly lets the random encoder outperform every pretrained encoder. Stronger decoders narrow or reverse the measured advantage of pretraining, which is why the benchmark keeps its readouts light.</p>
-      </div>
-      <figure class="f-fig fig-sm">
-        <img src="./static/images/decoder_capacity.png" alt="Full-body MPJPE of a frozen pretrained InrtlWrist and a frozen random encoder across five decoders: linear, one cross-channel layer at width 192 and 384, one cross-channel plus four temporal layers, and four cross-channel plus eight temporal layers. The gap shrinks from 9.7 mm to under 1 mm once temporal layers are added.">
-        <figcaption>Figure 4. Decoder capacity. Frozen-encoder full-body MPJPE (mm, lower is better); &Delta; is pretrained minus random. Click to enlarge.</figcaption>
-      </figure>
-    </div>
-
-    <div class="finding flip reveal" id="abl-coverage">
-      <div class="f-text">
-        <h3>Pretraining data and motion coverage</h3>
-        <p class="lede">Holding the architecture, probes and training budget fixed, we vary the amount and coverage of pretraining data: uniform draws from a five-source pool of 1,959,288 windows, or draws restricted to subsets of 1,000 motion clusters obtained by k-means on a separately trained MAE's features. At 50,000 updates, the 0.01% subsets trail the 0.1% subsets at every coverage level, while uniform draws from 0.1% to 100% of the pool perform alike. Increasing motion coverage generally improves performance, most when few clusters are available. These findings are conditional on the training budget and the sampling scheme, since restricting clusters also changes source composition.</p>
-      </div>
-      <figure class="f-fig">
-        <img src="./static/images/scaling_coverage.png" alt="Eight-probe mean against pretraining volume for different numbers of allowed motion clusters after 50,000 updates, normalized by the full pool's gain over a random encoder.">
-        <figcaption>Figure 5. Motion coverage. Eight-probe mean after 50,000 updates. Per-probe changes from the full pool are normalized by its gain over random and clipped to &plusmn;100%. Click to enlarge.</figcaption>
-      </figure>
-    </div>
-
-    <div class="finding reveal" id="abl-joint">
-      <div class="f-text">
-        <h3>Joint task supervision</h3>
-        <p class="lede">We compare single-task fine-tuning with joint supervision of full-body pose and either odometry or microgesture, starting from the same pretrained encoder with separate decoders. Joint training improves odometry ATE from 0.154 to 0.149&nbsp;m and gesture F1 from 54.2 to 65.0, above training from scratch. It also raises full-body MPJPE from 88.1&nbsp;mm alone to 91.5&nbsp;mm with odometry and 94.4&nbsp;mm with microgesture, and lowers the joint encoder's frozen IMU&ndash;text Recall@1 from 27.9 to 21.0 and 17.2. Gains on the partner task come with losses on the jointly trained pose task and on language retrieval. Pose with odometry alternates 1:1 for 40,000 steps; pose with microgesture 10:1 for 22,000 steps; each target selects its own checkpoint.</p>
-      </div>
-      <div class="f-fig fig-sm">
-        <div class="lb-wrap">
-          <table class="lb">
-            <thead><tr><th>Target</th><th>Scratch</th><th>InrtlWrist alone</th><th>InrtlWrist + full-body pose</th></tr></thead>
-            <tbody>
-              <tr><td>Odometry ATE (m) &darr;</td><td>0.162</td><td>0.154</td><td class="b">0.149</td></tr>
-              <tr><td>Microgesture clip F1 &uarr;</td><td>60.8</td><td>54.2</td><td class="b">65.0</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="lb-note">Joint fine-tuning with full-body pose. Both InrtlWrist conditions start from the same pretrained encoder; scores use per-task checkpoints. Bold: best per row.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ Also worth knowing ============ -->
-<section class="section" id="notes">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="kicker">Also worth knowing</span>
-      <h2>Protocol choices move the numbers</h2>
-      <p>A few results from the ablations that change how wrist-IMU benchmarks should be read.</p>
-    </div>
-    <ul class="blist reveal">
-      <li><details class="bl-item a-sem">
-        <summary><span class="bl-dot"></span>Frozen or fine-tuned depends on the task<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
-        <div class="bl-body"><p>HHAR and gesture favor frozen probing. TransfHAR (72.7 to 86.1 F1) and PRISM (27.9 to 36.8) gain most from fine-tuning, and both kinematic tasks need it to pass training from scratch.</p></div>
-      </details></li>
-      <li><details class="bl-item a-kin">
-        <summary><span class="bl-dot"></span>The gyroscope matters for kinematics and retrieval<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
-        <div class="bl-body"><p>Accelerometer-only pretraining raises every kinematic error under both protocols and lowers frozen IMU&ndash;text Recall@1 from 27.9 to 20.7, while mean activity F1 only moves from 57.8 to 55.9.</p></div>
-      </details></li>
-      <li><details class="bl-item a-cli">
-        <summary><span class="bl-dot"></span>Audit the corpus before you split<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
-        <div class="bl-body"><p>Every pretraining corpus is checked against every evaluation set, and evaluation datasets are excluded from pretraining. OpenWatch's duplicated and mirrored participant records are merged into canonical identities before the subject split, and sensor units are verified for every source.</p></div>
-      </details></li>
-    </ul>
-  </div>
-</section>
-
-<!-- ============ Tasks ============ -->
-<section class="section alt" id="tasks">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="kicker">Tasks</span>
-      <h2>Six families, one wrist, six channels</h2>
-      <p>Every task reads the same accelerometer and gyroscope stream from a single wrist. Click a card for the dataset, output and split.</p>
-    </div>
-    <div class="mgrid reveal">
-      <button class="mcard a-kin" type="button" aria-expanded="false">
-        <span class="mc-icon"><svg class="ic"><use href="#i-pose"/></svg></span>
-        <span class="mc-title">Arm &amp; full-body pose</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
-        <span class="mc-meta">Nymeria &middot; 300 h &middot; cm / mm MPJPE</span>
-        <span class="mc-desc"><span>Real right-wrist IMU with motion capture. One set of 6-D joint rotations per 0.32&nbsp;s patch of a 10.24&nbsp;s window: five right-arm joints scored by position error in cm, or 23 SMPL joints scored by root-relative MPJPE in mm. Split by recording session; participants recur.</span></span>
-      </button>
-      <button class="mcard a-kin" type="button" aria-expanded="false">
-        <span class="mc-icon"><svg class="ic"><use href="#i-route"/></svg></span>
-        <span class="mc-title">Inertial odometry</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
-        <span class="mc-meta">Nymeria &middot; ATE (m)</span>
-        <span class="mc-desc"><span>Pelvis velocity predicted in the wrist frame, rotated into world coordinates with the ground-truth initial wrist orientation propagated by gyroscope integration, then integrated into a trajectory and scored by absolute trajectory error.</span></span>
-      </button>
-      <button class="mcard a-sem" type="button" aria-expanded="false">
-        <span class="mc-icon"><svg class="ic"><use href="#i-hand"/></svg></span>
-        <span class="mc-title">Microgesture</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
-        <span class="mc-meta">OpenWatch &middot; 5 + background &middot; clip macro-F1</span>
-        <span class="mc-desc"><span>1&nbsp;s windows at 100&nbsp;Hz voted into clip labels. Subject split over 43 canonical identities after duplicated and mirrored participant records are merged.</span></span>
-      </button>
-      <button class="mcard a-sem" type="button" aria-expanded="false">
-        <span class="mc-icon"><svg class="ic"><use href="#i-text"/></svg></span>
-        <span class="mc-title">IMU&ndash;text retrieval</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
-        <span class="mc-meta">HumanML3D (simulated wrist) &middot; Recall@1</span>
-        <span class="mc-desc"><span>Simulated right-wrist IMU aligned with CLIP text embeddings. Mean Recall@1 over both retrieval directions in galleries of 100 on the official test split; 3,701 clips in the full gallery.</span></span>
-      </button>
-      <button class="mcard a-cli" type="button" aria-expanded="false">
-        <span class="mc-icon"><svg class="ic"><use href="#i-pulse"/></svg></span>
-        <span class="mc-title">Parkinson's disease</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
-        <span class="mc-meta">PADS &middot; 469 participants &middot; participant macro-F1</span>
-        <span class="mc-desc"><span>Healthy control, Parkinson's disease or differential diagnosis. Single-wrist 2.56&nbsp;s windows; a participant's prediction averages window posteriors across both wrists. Subject-disjoint split with class-weighted training.</span></span>
-      </button>
-      <button class="mcard a-sem" type="button" aria-expanded="false">
-        <span class="mc-icon"><svg class="ic"><use href="#i-run"/></svg></span>
-        <span class="mc-title">Activity recognition</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
-        <span class="mc-meta">HHAR 6 &middot; MHEALTH 12 &middot; PRISM 5 &middot; TransfHAR 60</span>
-        <span class="mc-desc"><span>2.56&nbsp;s windows scored by macro-F1. HHAR, MHEALTH and PRISM hold out participants. TransfHAR, a 60-activity smartwatch set, is split in time because most activities were performed by one participant.</span></span>
-      </button>
-    </div>
-  </div>
-</section>
-
 <!-- ============ Leaderboard ============ -->
-<section class="section" id="leaderboard">
+<section class="section alt" id="leaderboard">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Leaderboard</span>
@@ -639,6 +452,193 @@
   </div>
 </section>
 
+<!-- ============ Finding 1 ============ -->
+<section class="section" id="findings">
+  <div class="wrap wrap-wide">
+    <div class="section-head reveal">
+      <span class="kicker">What we found</span>
+      <h2>Broad usefulness and compatible supervision are different things</h2>
+      <p>Six self-supervised objectives, one backbone, one corpus, three protocols. The numbers separate what a pretrained encoder carries from what task supervision adds or takes away.</p>
+    </div>
+
+    <div class="finding reveal" id="finding-model">
+      <div class="f-text">
+        <h2>One pretrained wrist encoder. Best or joint-best on nine of ten tasks.</h2>
+        <p class="lede">InrtlWrist, a masked autoencoder with alternating frame and global attention, leads the six matched methods under frozen probing on nine of ten primary metrics, and fine-tuning it beats training from scratch on nine of ten tasks.</p>
+        <button class="discover" type="button" aria-expanded="false"><span>Discover more</span><svg class="ic"><use href="#i-arrow-r"/></svg></button>
+        <div class="f-detail">
+          <ul>
+            <li><strong>Frozen probing.</strong> Best or joint-best on nine of ten primary metrics among the six matched methods; SSL-Wearables leads on Parkinson's disease.</li>
+            <li><strong>Fine-tuning beats scratch on nine of ten tasks.</strong> Full-body MPJPE falls from 97.9 to 88.1&nbsp;mm (scratch 92.7), odometry ATE from 0.200 to 0.154&nbsp;m (scratch 0.162) and IMU&ndash;text Recall@1 rises from 27.9 to 38.8 (scratch 23.2).</li>
+            <li><strong>Gesture is the exception.</strong> Frozen InrtlWrist reaches 64.7 clip F1, ahead of every fine-tuned matched method; fine-tuning it drops the score to 54.2.</li>
+            <li><strong>The readout alone is not enough.</strong> A random frozen encoder reaches 26.2 mean activity F1 under the same linear probe; pretraining lifts it to 57.8.</li>
+          </ul>
+          <button class="back" type="button"><svg class="ic"><use href="#i-arrow-l"/></svg> Go back</button>
+        </div>
+      </div>
+      <figure class="f-fig">
+        <img src="./static/images/main_radar.png" alt="Two radar charts, frozen probe and fine-tune, over seven task axes (arm, body, odometry, gesture, text, Parkinson's disease, activity). InrtlWrist traces the largest polygon in both; training from scratch is drawn dashed.">
+        <figcaption>Downstream performance across task families. Each axis is normalized to the best score across both panels; larger radii are better. Activity averages macro-F1 over four datasets. Click a figure to enlarge.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Finding 2 ============ -->
+<section class="section alt" id="transfer">
+  <div class="wrap wrap-wide">
+    <div class="finding flip reveal" id="finding-transfer">
+      <div class="f-text">
+        <h2>Supervision for one task can benefit another, but not every pair is complementary.</h2>
+        <p class="lede">Seven supervised source encoders, each trained from scratch on one task, are evaluated on the other six. Kinematic supervision transfers to kinematic targets, and with fine-tuning every source improves IMU&ndash;text retrieval and Parkinson's. Under frozen probing, language retrieval stays with the pretrained encoder, and joint training gains on one task at a cost to its partner.</p>
+        <button class="discover" type="button" aria-expanded="false"><span>Discover more</span><svg class="ic"><use href="#i-arrow-r"/></svg></button>
+        <div class="f-detail">
+          <ul>
+            <li><strong>Frozen transfer.</strong> Supervised sources beat a random frozen encoder on 28 of 42 pairs. Kinematic targets gain most from kinematic sources: full-body supervision cuts odometry ATE from 0.233 to 0.186&nbsp;m. Five of the six kinematic transfers survive, at about half their size, on disjoint participants.</li>
+            <li><strong>Language stays with the pretrained encoder.</strong> Under frozen probing, no supervised source exceeds 11.8 Recall@1 on IMU&ndash;text, against 27.9 for InrtlWrist.</li>
+            <li><strong>With fine-tuning</strong>, 22 pairs improve over scratch and 20 decline. Every source improves IMU&ndash;text and Parkinson's; every source lowers gesture F1; no source improves odometry.</li>
+            <li><strong>Joint training</strong> with full-body pose improves odometry (0.154 to 0.149&nbsp;m) and gesture (54.2 to 65.0 F1) but raises body MPJPE and lowers frozen IMU&ndash;text recall.</li>
+          </ul>
+          <button class="back" type="button"><svg class="ic"><use href="#i-arrow-l"/></svg> Go back</button>
+        </div>
+      </div>
+      <figure class="f-fig">
+        <div class="two">
+          <img src="./static/images/transfer_frozen.png" alt="Heatmap of frozen cross-task transfer: source tasks in columns, targets in rows, colored by relative change against a random frozen encoder.">
+          <img src="./static/images/transfer_finetune.png" alt="Heatmap of cross-task transfer with fine-tuning: source tasks in columns, targets in rows, colored by relative change against target training from scratch.">
+        </div>
+        <figcaption>Cross-task transfer. Left: frozen transfer, colored against a random frozen encoder. Right: transfer with fine-tuning, colored against training from scratch. Green improves, orange-pink degrades, saturated at &plusmn;40%. MAE denotes InrtlWrist. Click a figure to enlarge.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Ablations ============ -->
+<section class="section" id="ablations">
+  <div class="wrap wrap-wide">
+    <div class="section-head reveal">
+      <span class="kicker">Ablations</span>
+      <h2>Architecture and training ablations</h2>
+      <p>Three controls behind the protocol: how much the readout contributes to a frozen probe, whether more pretraining data helps, and what joint supervision trades away.</p>
+    </div>
+
+    <div class="finding reveal" id="abl-decoder">
+      <div class="f-text">
+        <h3>Decoder capacity</h3>
+        <p class="lede">We compare frozen pretrained and random encoders as decoder capacity increases. Pretraining reduces full-body MPJPE by 9.7&nbsp;mm with a linear readout and 7.1&nbsp;mm with the benchmark decoder. Increasing decoder width changes this gap little, whereas adding temporal layers reduces it below 1&nbsp;mm. A 12-layer odometry decoder similarly lets the random encoder outperform every pretrained encoder. Stronger decoders narrow or reverse the measured advantage of pretraining, which is why the benchmark keeps its readouts light.</p>
+      </div>
+      <figure class="f-fig fig-sm">
+        <img src="./static/images/decoder_capacity.png" alt="Full-body MPJPE of a frozen pretrained InrtlWrist and a frozen random encoder across five decoders: linear, one cross-channel layer at width 192 and 384, one cross-channel plus four temporal layers, and four cross-channel plus eight temporal layers. The gap shrinks from 9.7 mm to under 1 mm once temporal layers are added.">
+        <figcaption>Figure 4. Decoder capacity. Frozen-encoder full-body MPJPE (mm, lower is better); &Delta; is pretrained minus random. Click to enlarge.</figcaption>
+      </figure>
+    </div>
+
+    <div class="finding flip reveal" id="abl-coverage">
+      <div class="f-text">
+        <h3>Pretraining data and motion coverage</h3>
+        <p class="lede">Holding the architecture, probes and training budget fixed, we vary the amount and coverage of pretraining data: uniform draws from a five-source pool of 1,959,288 windows, or draws restricted to subsets of 1,000 motion clusters obtained by k-means on a separately trained MAE's features. At 50,000 updates, the 0.01% subsets trail the 0.1% subsets at every coverage level, while uniform draws from 0.1% to 100% of the pool perform alike. Increasing motion coverage generally improves performance, most when few clusters are available. These findings are conditional on the training budget and the sampling scheme, since restricting clusters also changes source composition.</p>
+      </div>
+      <figure class="f-fig">
+        <img src="./static/images/scaling_coverage.png" alt="Eight-probe mean against pretraining volume for different numbers of allowed motion clusters after 50,000 updates, normalized by the full pool's gain over a random encoder.">
+        <figcaption>Figure 5. Motion coverage. Eight-probe mean after 50,000 updates. Per-probe changes from the full pool are normalized by its gain over random and clipped to &plusmn;100%. Click to enlarge.</figcaption>
+      </figure>
+    </div>
+
+    <div class="finding reveal" id="abl-joint">
+      <div class="f-text">
+        <h3>Joint task supervision</h3>
+        <p class="lede">We compare single-task fine-tuning with joint supervision of full-body pose and either odometry or microgesture, starting from the same pretrained encoder with separate decoders. Joint training improves odometry ATE from 0.154 to 0.149&nbsp;m and gesture F1 from 54.2 to 65.0, above training from scratch. It also raises full-body MPJPE from 88.1&nbsp;mm alone to 91.5&nbsp;mm with odometry and 94.4&nbsp;mm with microgesture, and lowers the joint encoder's frozen IMU&ndash;text Recall@1 from 27.9 to 21.0 and 17.2. Gains on the partner task come with losses on the jointly trained pose task and on language retrieval. Pose with odometry alternates 1:1 for 40,000 steps; pose with microgesture 10:1 for 22,000 steps; each target selects its own checkpoint.</p>
+      </div>
+      <div class="f-fig fig-sm">
+        <div class="lb-wrap">
+          <table class="lb">
+            <thead><tr><th>Target</th><th>Scratch</th><th>InrtlWrist alone</th><th>InrtlWrist + full-body pose</th></tr></thead>
+            <tbody>
+              <tr><td>Odometry ATE (m) &darr;</td><td>0.162</td><td>0.154</td><td class="b">0.149</td></tr>
+              <tr><td>Microgesture clip F1 &uarr;</td><td>60.8</td><td>54.2</td><td class="b">65.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="lb-note">Joint fine-tuning with full-body pose. Both InrtlWrist conditions start from the same pretrained encoder; scores use per-task checkpoints. Bold: best per row.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Also worth knowing ============ -->
+<section class="section alt" id="notes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Also worth knowing</span>
+      <h2>Protocol choices move the numbers</h2>
+      <p>A few results from the ablations that change how wrist-IMU benchmarks should be read.</p>
+    </div>
+    <ul class="blist reveal">
+      <li><details class="bl-item a-sem">
+        <summary><span class="bl-dot"></span>Frozen or fine-tuned depends on the task<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
+        <div class="bl-body"><p>HHAR and gesture favor frozen probing. TransfHAR (72.7 to 86.1 F1) and PRISM (27.9 to 36.8) gain most from fine-tuning, and both kinematic tasks need it to pass training from scratch.</p></div>
+      </details></li>
+      <li><details class="bl-item a-kin">
+        <summary><span class="bl-dot"></span>The gyroscope matters for kinematics and retrieval<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
+        <div class="bl-body"><p>Accelerometer-only pretraining raises every kinematic error under both protocols and lowers frozen IMU&ndash;text Recall@1 from 27.9 to 20.7, while mean activity F1 only moves from 57.8 to 55.9.</p></div>
+      </details></li>
+      <li><details class="bl-item a-cli">
+        <summary><span class="bl-dot"></span>Audit the corpus before you split<svg class="ic acc-ico"><use href="#i-plus"/></svg></summary>
+        <div class="bl-body"><p>Every pretraining corpus is checked against every evaluation set, and evaluation datasets are excluded from pretraining. OpenWatch's duplicated and mirrored participant records are merged into canonical identities before the subject split, and sensor units are verified for every source.</p></div>
+      </details></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ Tasks ============ -->
+<section class="section" id="tasks">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Tasks</span>
+      <h2>Six families, one wrist, six channels</h2>
+      <p>Every task reads the same accelerometer and gyroscope stream from a single wrist. Click a card for the dataset, output and split.</p>
+    </div>
+    <div class="mgrid reveal">
+      <button class="mcard a-kin" type="button" aria-expanded="false">
+        <span class="mc-icon"><svg class="ic"><use href="#i-pose"/></svg></span>
+        <span class="mc-title">Arm &amp; full-body pose</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
+        <span class="mc-meta">Nymeria &middot; 300 h &middot; cm / mm MPJPE</span>
+        <span class="mc-desc"><span>Real right-wrist IMU with motion capture. One set of 6-D joint rotations per 0.32&nbsp;s patch of a 10.24&nbsp;s window: five right-arm joints scored by position error in cm, or 23 SMPL joints scored by root-relative MPJPE in mm. Split by recording session; participants recur.</span></span>
+      </button>
+      <button class="mcard a-kin" type="button" aria-expanded="false">
+        <span class="mc-icon"><svg class="ic"><use href="#i-route"/></svg></span>
+        <span class="mc-title">Inertial odometry</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
+        <span class="mc-meta">Nymeria &middot; ATE (m)</span>
+        <span class="mc-desc"><span>Pelvis velocity predicted in the wrist frame, rotated into world coordinates with the ground-truth initial wrist orientation propagated by gyroscope integration, then integrated into a trajectory and scored by absolute trajectory error.</span></span>
+      </button>
+      <button class="mcard a-sem" type="button" aria-expanded="false">
+        <span class="mc-icon"><svg class="ic"><use href="#i-hand"/></svg></span>
+        <span class="mc-title">Microgesture</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
+        <span class="mc-meta">OpenWatch &middot; 5 + background &middot; clip macro-F1</span>
+        <span class="mc-desc"><span>1&nbsp;s windows at 100&nbsp;Hz voted into clip labels. Subject split over 43 canonical identities after duplicated and mirrored participant records are merged.</span></span>
+      </button>
+      <button class="mcard a-sem" type="button" aria-expanded="false">
+        <span class="mc-icon"><svg class="ic"><use href="#i-text"/></svg></span>
+        <span class="mc-title">IMU&ndash;text retrieval</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
+        <span class="mc-meta">HumanML3D (simulated wrist) &middot; Recall@1</span>
+        <span class="mc-desc"><span>Simulated right-wrist IMU aligned with CLIP text embeddings. Mean Recall@1 over both retrieval directions in galleries of 100 on the official test split; 3,701 clips in the full gallery.</span></span>
+      </button>
+      <button class="mcard a-cli" type="button" aria-expanded="false">
+        <span class="mc-icon"><svg class="ic"><use href="#i-pulse"/></svg></span>
+        <span class="mc-title">Parkinson's disease</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
+        <span class="mc-meta">PADS &middot; 469 participants &middot; participant macro-F1</span>
+        <span class="mc-desc"><span>Healthy control, Parkinson's disease or differential diagnosis. Single-wrist 2.56&nbsp;s windows; a participant's prediction averages window posteriors across both wrists. Subject-disjoint split with class-weighted training.</span></span>
+      </button>
+      <button class="mcard a-sem" type="button" aria-expanded="false">
+        <span class="mc-icon"><svg class="ic"><use href="#i-run"/></svg></span>
+        <span class="mc-title">Activity recognition</span><svg class="ic mc-plus"><use href="#i-plus"/></svg>
+        <span class="mc-meta">HHAR 6 &middot; MHEALTH 12 &middot; PRISM 5 &middot; TransfHAR 60</span>
+        <span class="mc-desc"><span>2.56&nbsp;s windows scored by macro-F1. HHAR, MHEALTH and PRISM hold out participants. TransfHAR, a 60-activity smartwatch set, is split in time because most activities were performed by one participant.</span></span>
+      </button>
+    </div>
+  </div>
+</section>
+
 <!-- ============ CTA ============ -->
 <section class="cta-band">
   <div class="wrap reveal">
@@ -660,10 +660,10 @@
     <nav class="foot-links">
       <a href="#how">How it works</a>
       <a href="#idea">The question</a>
-      <a href="#findings">Findings</a>
-      <a href="#tasks">Tasks</a>
       <a href="#leaderboard">Leaderboard</a>
       <a href="#per-task">Per-task Leaderboard</a>
+      <a href="#findings">Findings</a>
+      <a href="#tasks">Tasks</a>
       <a href="./paper/index.html">Paper</a>
       <a href="https://github.com/SPICExLAB/IMU-Bench" target="_blank" rel="noopener">Code</a>
     </nav>
