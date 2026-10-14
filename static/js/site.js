@@ -43,6 +43,7 @@
     btns.forEach(function (b) {
       b.addEventListener('click', function () {
         btns.forEach(function (o) { o.setAttribute('aria-selected', o === b); var p = document.getElementById(o.getAttribute('aria-controls')); if (p) p.hidden = (o !== b); });
+        $$('.tt-cap').forEach(function (c) { if (btns.some(function (o) { return o.getAttribute('aria-controls') === c.getAttribute('data-for'); })) c.hidden = (c.getAttribute('data-for') !== b.getAttribute('aria-controls')); });
       });
     });
   });
