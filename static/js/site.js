@@ -47,6 +47,20 @@
     });
   });
 
+  /* figures: click to enlarge */
+  $$('.f-fig img, figure.paper-fig img').forEach(function (img) {
+    img.addEventListener('click', function () {
+      var lb = document.createElement('div'); lb.className = 'lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-label', img.alt || 'Figure');
+      var big = document.createElement('img'); big.src = img.src; big.alt = img.alt; lb.appendChild(big);
+      var fig = img.closest('figure'), cap = fig && fig.querySelector('figcaption');
+      if (cap) { var c = document.createElement('p'); c.className = 'lb-cap'; c.textContent = cap.textContent.replace(/\s*Click a figure to enlarge\.?$/, ''); lb.appendChild(c); }
+      function close() { lb.remove(); document.removeEventListener('keydown', onKey); }
+      function onKey(e) { if (e.key === 'Escape') close(); }
+      lb.addEventListener('click', close); document.addEventListener('keydown', onKey);
+      document.body.appendChild(lb);
+    });
+  });
+
   /* copy BibTeX */
   $$('.copy-btn').forEach(function (b) {
     b.addEventListener('click', function () {

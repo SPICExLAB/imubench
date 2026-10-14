@@ -137,7 +137,7 @@
 
 <!-- ============ Finding 1 ============ -->
 <section class="section" id="findings">
-  <div class="wrap">
+  <div class="wrap wrap-wide">
     <div class="section-head reveal">
       <span class="kicker">What we found</span>
       <h2>Broad usefulness and compatible supervision are different things</h2>
@@ -161,7 +161,7 @@
       </div>
       <figure class="f-fig">
         <img src="./static/images/main_radar.png" alt="Two radar charts, frozen probe and fine-tune, over seven task axes (arm, body, odometry, gesture, text, Parkinson's disease, activity). InrtlWrist traces the largest polygon in both; training from scratch is drawn dashed.">
-        <figcaption>Downstream performance across task families. Each axis is normalized to the best score across both panels; larger radii are better. Activity averages macro-F1 over four datasets.</figcaption>
+        <figcaption>Downstream performance across task families. Each axis is normalized to the best score across both panels; larger radii are better. Activity averages macro-F1 over four datasets. Click a figure to enlarge.</figcaption>
       </figure>
     </div>
   </div>
@@ -169,7 +169,7 @@
 
 <!-- ============ Finding 2 ============ -->
 <section class="section alt" id="transfer">
-  <div class="wrap">
+  <div class="wrap wrap-wide">
     <div class="finding flip reveal" id="finding-transfer">
       <div class="f-text">
         <h2>Supervision for one task can cost another.</h2>
@@ -190,7 +190,7 @@
           <img src="./static/images/transfer_frozen.png" alt="Heatmap of frozen cross-task transfer: source tasks in columns, targets in rows, colored by relative change against a random frozen encoder.">
           <img src="./static/images/transfer_finetune.png" alt="Heatmap of cross-task transfer with fine-tuning: source tasks in columns, targets in rows, colored by relative change against target training from scratch.">
         </div>
-        <figcaption>Cross-task transfer. Left: frozen transfer, colored against a random frozen encoder. Right: transfer with fine-tuning, colored against training from scratch. Green improves, orange-pink degrades, saturated at &plusmn;40%. MAE denotes InrtlWrist.</figcaption>
+        <figcaption>Cross-task transfer. Left: frozen transfer, colored against a random frozen encoder. Right: transfer with fine-tuning, colored against training from scratch. Green improves, orange-pink degrades, saturated at &plusmn;40%. MAE denotes InrtlWrist. Click a figure to enlarge.</figcaption>
       </figure>
     </div>
   </div>

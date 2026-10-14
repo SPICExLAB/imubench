@@ -186,11 +186,13 @@ p { margin: 0; }
 @media (max-width: 600px) { .acc-item summary { grid-template-columns: 2.4rem 1fr auto; } .acc-body { padding-left: 1.2rem; } }
 
 /* findings: split with discover / go back */
-.finding { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.wrap-wide { width: min(1360px, 100% - 2rem); }
+.finding { display: grid; grid-template-columns: 2fr 3fr; gap: 2.5rem; align-items: center; }
 .finding.flip .f-text { order: 2; }
 .finding .f-text h2 { margin-bottom: 1rem; }
 .finding .f-text .lede { color: var(--ink-soft); font-size: 1.06rem; max-width: 52ch; }
-.finding .f-fig { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 1rem; box-shadow: var(--shadow-sm); }
+.finding .f-fig { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: .75rem; box-shadow: var(--shadow-sm); min-width: 0; }
+.finding .f-fig img, figure.paper-fig img { cursor: zoom-in; }
 .finding .f-fig figcaption { margin-top: .6rem; font-size: .82rem; color: var(--muted); line-height: 1.45; }
 .finding .f-fig .two { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
 .discover { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.3rem; background: none; border: 0; padding: 0; font: inherit; font-family: var(--display); font-weight: 650; font-size: 1rem; color: var(--accent); cursor: pointer; }
@@ -204,7 +206,7 @@ p { margin: 0; }
 .back { display: inline-flex; align-items: center; gap: .4rem; background: none; border: 0; padding: 0; font: inherit; font-family: var(--display); font-weight: 650; color: var(--accent); cursor: pointer; }
 .back:hover .ic { transform: translateX(-4px); }
 .back .ic { transition: transform .2s; }
-@media (max-width: 860px) { .finding { grid-template-columns: 1fr; gap: 1.6rem; } .finding.flip .f-text { order: 0; } }
+@media (max-width: 1000px) { .finding { grid-template-columns: 1fr; gap: 1.6rem; } .finding.flip .f-text { order: 0; } }
 
 /* bullet list with expanders */
 .blist { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
@@ -359,3 +361,8 @@ table.tt td.mono { font-family: var(--mono); font-size: .8rem; color: var(--ink-
 .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
 @media (max-width: 860px) { .cite { grid-template-columns: 1fr; } }
 .ack { margin-top: 1.4rem; font-size: .9rem; color: var(--muted); max-width: 70ch; }
+
+/* lightbox: click a figure to see it at full size */
+.lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(8,12,18,.88); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .9rem; padding: 2vh 2vw; cursor: zoom-out; }
+.lightbox img { max-width: 96vw; max-height: 86vh; width: auto; height: auto; background: #fff; border-radius: 8px; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+.lightbox .lb-cap { margin: 0; max-width: 90ch; text-align: center; color: #dfe6ee; font-size: .9rem; line-height: 1.45; }
