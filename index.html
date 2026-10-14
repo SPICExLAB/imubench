@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./static/css/site.css?v=11">
+  <link rel="stylesheet" href="./static/css/site.css?v=12">
 </head>
 <body id="top">
 
@@ -500,8 +500,8 @@
         <figcaption><b>Full-body pose from one wrist.</b> Ground truth (teal) against the pose predicted by fine-tuned InrtlWrist (amber) for frames spread across four validation sessions, front and side views; the number above each frame is its mean joint error over the 23 joints. The pelvis orientation is taken from ground truth, as in the benchmark's metric. Click to enlarge.</figcaption>
       </figure>
       <figure class="paper-fig">
-        <img src="./static/images/odometry_windows.png" alt="Six top-down pelvis trajectories over 2.56-second validation windows: ground truth in teal and fine-tuned InrtlWrist in dashed amber, each with its absolute trajectory error.">
-        <figcaption><b>Inertial odometry.</b> Pelvis trajectory over 2.56 s windows, seen from above: ground truth (teal) and fine-tuned InrtlWrist (dashed amber), each window labelled with its absolute trajectory error. Predicted wrist-frame velocities are rotated into the world frame with the gyroscope-propagated initial orientation and integrated, exactly as the ATE metric does. The six windows are drawn from the lowest-error quarter of the windows with above-median motion in four validation sessions; the benchmark mean over all 73,515 evaluation windows is 0.154 m. Click to enlarge.</figcaption>
+        <img src="./static/images/odometry_windows.png" alt="Four top-down pelvis trajectories over 2.56-second validation windows: ground truth in teal and fine-tuned InrtlWrist in dashed amber, each with its absolute trajectory error.">
+        <figcaption><b>Inertial odometry.</b> Pelvis trajectory over 2.56 s windows, seen from above: ground truth (teal) and fine-tuned InrtlWrist (dashed amber), each window labelled with its absolute trajectory error. Predicted wrist-frame velocities are rotated into the world frame with the gyroscope-propagated initial orientation and integrated, exactly as the ATE metric does. The four windows are drawn from the lowest-error 15% of the windows with above-median motion in four validation sessions; the benchmark mean over all 73,515 evaluation windows is 0.154 m. Click to enlarge.</figcaption>
       </figure>
     </div>
   </div>
@@ -697,6 +697,6 @@
   </div>
 </footer>
 
-<script src="./static/js/site.js?v=11"></script>
+<script src="./static/js/site.js?v=12"></script>
 </body>
 </html>
