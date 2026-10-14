@@ -262,7 +262,7 @@ table.lb tbody tr:hover td { background: var(--accent-bg); }
 .authors sup { font-size: .7em; color: var(--accent); }
 .affils { color: var(--muted); font-size: .9rem; margin-top: .4rem; }
 .paper-hero .cta-row { margin-top: 1.5rem; }
-.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: .8rem; margin-top: 2.6rem; }
+.stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: .8rem; margin-top: 2.6rem; }
 .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: .95rem .6rem; }
 .stat b { display: block; font-family: var(--display); font-size: 1.7rem; font-weight: 800; letter-spacing: -.03em; color: var(--accent); line-height: 1.1; font-variant-numeric: tabular-nums; }
 .stat span { font-size: .8rem; color: var(--muted); }
@@ -402,3 +402,6 @@ table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px s
 .finding.flip { grid-template-columns: 3fr 2fr; }
 .finding.flip.fig-wide { grid-template-columns: 2.6fr 1fr; }
 @media (max-width: 1000px) { .finding.flip, .finding.flip.fig-wide { grid-template-columns: 1fr; } }
+/* qualitative figures: full-width stacked cards */
+.qual-grid { display: grid; gap: 1.4rem; }
+.qual-grid figure.paper-fig img { cursor: zoom-in; }
