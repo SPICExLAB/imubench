@@ -368,3 +368,7 @@ table.lb td:first-child { white-space: normal; min-width: 14rem; }
 table.lb th { background: var(--accent-bg); color: var(--accent-d); }
 table.lb th small { color: var(--accent); }
 table.lb th.grp { background: color-mix(in srgb, var(--accent-bg) 55%, var(--surface)); }
+/* leaderboard header: solid accent band, white text */
+table.lb th { background: var(--accent); color: #fff; border-bottom: 1px solid var(--accent-d); }
+table.lb th small { color: rgba(255,255,255,.82); }
+table.lb th.grp { background: var(--accent-d); color: #fff; border-bottom: 1px solid rgba(255,255,255,.25); }
