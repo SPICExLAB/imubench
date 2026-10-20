@@ -1254,10 +1254,9 @@ imu-bench<span class="w"> </span>tasks<span class="w">                          
 imu-bench<span class="w"> </span><span class="nb">eval</span><span class="w"> </span>--encoder<span class="w"> </span>examples/plugin/inrtlwrist_plugin.yaml<span class="w"> </span>--tasks<span class="w"> </span>har_hhar<span class="w"> </span>--protocols<span class="w"> </span>probe
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">huggingface_hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">hf_hub_download</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scripts.load_inrtlwrist</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_inrtlwrist</span><span class="p">,</span> <span class="n">zscore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scripts.load_inrtlwrist</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_hub</span><span class="p">,</span> <span class="n">zscore</span>
 
-<span class="n">enc</span> <span class="o">=</span> <span class="n">load_inrtlwrist</span><span class="p">(</span><span class="n">hf_hub_download</span><span class="p">(</span><span class="s2">&quot;YiquanLi/InrtlWrist&quot;</span><span class="p">,</span> <span class="s2">&quot;inrtlwrist_mae_5src_step144k.pt&quot;</span><span class="p">))</span>
+<span class="n">enc</span> <span class="o">=</span> <span class="n">from_hub</span><span class="p">(</span><span class="s2">&quot;YiquanLi/InrtlWrist&quot;</span><span class="p">)</span>      <span class="c1"># downloads config.json + the checkpoint</span>
 <span class="n">z</span> <span class="o">=</span> <span class="n">enc</span><span class="p">(</span><span class="n">zscore</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">512</span><span class="p">)))</span>            <span class="c1"># [2, 384] pooled embedding of two 10.24 s wrist windows</span>
 </code></pre></div>
 <h2 id="documentation-structure">Documentation structure<a class="headerlink" href="#documentation-structure" title="Permanent link">&para;</a></h2>

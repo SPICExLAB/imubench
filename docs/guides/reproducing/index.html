@@ -1192,9 +1192,8 @@ python<span class="w"> </span>analysis/plot_transferability_5src.py<span class="
 <p>The five controlled-track baselines use the same corpus and backbone with <code>scripts/run_ssl_baseline.py</code>; their configs
 and launch scripts are under <code>configs/</code> and <code>launch/pretrain/</code>. The released checkpoint (144,000 updates) is on the
 Hub and loads with <code>scripts/load_inrtlwrist.py</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">huggingface_hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">hf_hub_download</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scripts.load_inrtlwrist</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_inrtlwrist</span><span class="p">,</span> <span class="n">zscore</span>
-<span class="n">enc</span> <span class="o">=</span> <span class="n">load_inrtlwrist</span><span class="p">(</span><span class="n">hf_hub_download</span><span class="p">(</span><span class="s2">&quot;YiquanLi/InrtlWrist&quot;</span><span class="p">,</span> <span class="s2">&quot;inrtlwrist_mae_5src_step144k.pt&quot;</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.load_inrtlwrist</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_hub</span><span class="p">,</span> <span class="n">zscore</span>
+<span class="n">enc</span> <span class="o">=</span> <span class="n">from_hub</span><span class="p">(</span><span class="s2">&quot;YiquanLi/InrtlWrist&quot;</span><span class="p">)</span>      <span class="c1"># downloads config.json + the checkpoint</span>
 </code></pre></div>
 <h2 id="running-a-cell-without-the-cli">Running a cell without the CLI<a class="headerlink" href="#running-a-cell-without-the-cli" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>bench.make_config<span class="w"> </span>--task<span class="w"> </span>pd_pads<span class="w"> </span>--encoder<span class="w"> </span>mae_5src<span class="w"> </span>--protocol<span class="w"> </span>probe<span class="w"> </span>--seed<span class="w"> </span><span class="m">42</span>
